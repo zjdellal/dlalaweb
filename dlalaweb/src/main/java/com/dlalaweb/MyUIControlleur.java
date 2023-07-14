@@ -1,19 +1,24 @@
 package com.dlalaweb;
 
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
 import com.dlalacore.dlala.entities.Utilisateur;
 import com.dlalaweb.login.LoginPresenter;
+import com.dlalaweb.phones.PhonesPresenter;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
-public class MyUIControlleur implements Observer {
-	private LoginPresenter login;
+@SuppressWarnings("serial")
+public class MyUIControlleur implements Observer, Serializable {
+	private LoginPresenter	login;
+	private PhonesPresenter	phones;
 
 	public MyUIControlleur() {
 		login = new LoginPresenter();
 		login.addObserver(this);
+		
 	}
 
 	@Override
@@ -26,7 +31,9 @@ public class MyUIControlleur implements Observer {
 				getLogin().getView().getWinContent().close();
 				Notification.show("bienvenue " + user.toString(), Notification.Type.WARNING_MESSAGE);
 			}
-
+			phones = new PhonesPresenter();
+			phones.addObserver(this);
+			UI.getCurrent().setContent(phones.getView());
 		}
 
 	}
