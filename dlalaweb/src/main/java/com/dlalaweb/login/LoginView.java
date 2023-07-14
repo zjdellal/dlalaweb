@@ -66,4 +66,14 @@ public class LoginView extends VerticalLayout {
 		return winContent;
 	}
 
+	public Button getBtnConnexion() {
+		return btnConnexion;
+	}
+
+	public Button getBtnFemer() {
+		return btnFemer;
+	}
+	
+	
+
 }
