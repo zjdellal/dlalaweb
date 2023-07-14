@@ -15,6 +15,11 @@ import org.springframework.http.HttpStatus;
 import com.dlalacore.dlala.entities.Utilisateur;
 import com.dlalaweb.service.client.RestClient;
 import com.dlalaweb.service.impl.UtilisateurService;
+import com.vaadin.server.ErrorEvent;
+import com.vaadin.server.ErrorHandler;
+import com.vaadin.server.ErrorMessage;
+import com.vaadin.server.UserError;
+import com.vaadin.shared.ui.ErrorLevel;
 import com.vaadin.ui.Notification;
 
 import aj.org.objectweb.asm.Type;
@@ -37,9 +42,19 @@ public class LoginPresenter extends Observable {
 	}
 
 	private void onBtnLoginClicked() {
-		Utilisateur u = service.connect("hbibti", "test");
-		System.out.println(u);
-		Notification.show("bienvenue " + u.toString(), Notification.Type.WARNING_MESSAGE);
+		//récupération des saisie
+		String username = view.getTxtUserName().getValue();
+		String password = view.getTxtPassword().getValue();
+		Utilisateur user = service.connect(username, password);
+		
+		if(user != null) {
+			setChanged();
+			notifyObservers(user);
+			this.getView().getBtnConnexion().setComponentError(null);
+		}else {
+			this.getView().getBtnConnexion().setComponentError(new UserError("Nom d'utilisateur ou password incorrect!"));
+		}
+		
 
 	}
 
