@@ -8,14 +8,16 @@ import com.dlalacore.dlala.entities.Phone;
 import com.dlalacore.dlala.entities.Utilisateur;
 import com.dlalaweb.login.LoginPresenter;
 import com.dlalaweb.phones.PhonesPresenter;
+import com.dlalaweb.phones.details.DetailsPhonePresenter;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
 public class MyUIControlleur implements Observer, Serializable {
-	private LoginPresenter	login;
-	private PhonesPresenter	phones;
+	private LoginPresenter				login;
+	private PhonesPresenter				phones;
+	private DetailsPhonePresenter	phone;
 
 	public MyUIControlleur() {
 		login = new LoginPresenter();
@@ -39,8 +41,9 @@ public class MyUIControlleur implements Observer, Serializable {
 		}
 		if (o instanceof PhonesPresenter) {
 			if (arg instanceof Phone) {
+				phone = new DetailsPhonePresenter((Phone) arg);
+				UI.getCurrent().addWindow(phone.getView().getWinContent());
 
-				Notification.show("Allo Items : " + arg, Type.HUMANIZED_MESSAGE);
 			}
 
 		}
