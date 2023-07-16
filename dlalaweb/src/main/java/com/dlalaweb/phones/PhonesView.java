@@ -1,6 +1,6 @@
 package com.dlalaweb.phones;
 
-import com.dlalacore.dlala.entities.Phones;
+import com.dlalacore.dlala.entities.Phone;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -8,7 +8,7 @@ import com.vaadin.ui.VerticalLayout;
 @SuppressWarnings("serial")
 public class PhonesView extends VerticalLayout {
 	private Label		lblCaption;
-	private Grid<Phones>	gPhones;
+	private Grid<Phone>	gPhones;
 
 	public PhonesView() {
 		this.setSizeFull();
@@ -21,7 +21,7 @@ public class PhonesView extends VerticalLayout {
 
 	private void buildScreen() {
 		lblCaption = new Label();
-		gPhones = new Grid<Phones>();
+		gPhones = new Grid<Phone>();
 		gPhones.setSizeFull();
 		this.addComponent(lblCaption);
 		this.addComponent(gPhones);
@@ -33,7 +33,8 @@ public class PhonesView extends VerticalLayout {
 		return lblCaption;
 	}
 
-
-
+	public Grid<Phone> getgPhones() {
+		return gPhones;
+	}
 
 }
