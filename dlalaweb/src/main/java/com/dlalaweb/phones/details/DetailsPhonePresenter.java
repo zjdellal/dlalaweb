@@ -35,8 +35,11 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	}
 
 	private void onBtnSaveClicked() {
-		
 		Phone phone = new Phone();
+		if(model.getSelectedPhone()!= null) {
+			phone.setId(model.getSelectedPhone().getId());
+		}
+		
 		phone.setMarque(view.getTxtMarquePhone().getValue());
 		phone.setModel(view.getTxtModelPhone().getValue());
 		phone.setEtatBatterie("50%");
