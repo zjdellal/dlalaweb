@@ -28,20 +28,28 @@ public class PhonesPresenter extends Observable implements PhoneListener {
 
 	private void SetListenersComponents() {
 		this.view.getgPhones().addItemClickListener(e -> onItemGridClicked(e));
+		this.view.getBtnAjouter().addClickListener(e -> onBtnAjouterClicked());
+
+	}
+
+	private void onBtnAjouterClicked() {
+		setChanged();
+		notifyObservers("Ajouter téléphone");
 
 	}
 
 	/**
 	 * méthode listener item on grid
-	 * @param e 
+	 * 
+	 * @param e
 	 */
-	
-	private void  onItemGridClicked(ItemClick<Phone> e) {
+
+	private void onItemGridClicked(ItemClick<Phone> e) {
 		Phone phone = e.getItem();
-			if(phone != null) {
-				setChanged();
-				notifyObservers(phone);
-			}
+		if (phone != null) {
+			setChanged();
+			notifyObservers(phone);
+		}
 
 	}
 

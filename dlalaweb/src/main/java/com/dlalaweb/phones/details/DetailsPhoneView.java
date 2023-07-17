@@ -1,5 +1,7 @@
 package com.dlalaweb.phones.details;
 
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
@@ -17,6 +19,7 @@ public class DetailsPhoneView extends VerticalLayout {
 
 	private ComboBox<String>	comboEtatPhone, comboCotePhone;
 	private DateField					dateAchatPhone, dateVentePhone, dateMajPhone;
+	private Button						btnSave;
 
 	private Window						winContent;
 
@@ -24,13 +27,13 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.setSizeFull();
 
 		this.setSpacing(false);
-		winContent = new Window("<h2><b>Détails du téléphone</b><h2>", this);
+		winContent = new Window("<h3><b>Détails du téléphone</b><h3>", this);
 		winContent.setCaptionAsHtml(true);
 		winContent.setSizeFull();
 		winContent.center();
 		winContent.setModal(true);
 		winContent.setDraggable(false);
-		winContent.setClosable(false);
+
 		winContent.setWidth("80%");
 		buildScreen();
 	}
@@ -39,6 +42,7 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.buidLigneHl1();
 		this.buidLigneHl2();
 		this.buidLigneHl3();
+		this.buildButtonSide();
 	}
 
 	private void buidLigneHl1() {
@@ -80,6 +84,13 @@ public class DetailsPhoneView extends VerticalLayout {
 		hl3.addComponents(comboCotePhone, dateAchatPhone, dateVentePhone, dateMajPhone);
 		this.addComponent(hl3);
 
+	}
+
+	private void buildButtonSide() {
+		btnSave = new Button("Enregistrer");
+		HorizontalLayout hButtons = new HorizontalLayout(btnSave);
+		this.addComponent(hButtons);
+		this.setComponentAlignment(hButtons, Alignment.BOTTOM_CENTER);
 	}
 
 	public TextField getTxtMarquePhone() {
@@ -133,5 +144,10 @@ public class DetailsPhoneView extends VerticalLayout {
 	public Window getWinContent() {
 		return winContent;
 	}
+
+	public Button getBtnSave() {
+		return btnSave;
+	}
+	
 
 }

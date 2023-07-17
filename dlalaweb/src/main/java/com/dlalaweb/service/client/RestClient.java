@@ -64,6 +64,13 @@ public class RestClient<T extends Serializable> implements Serializable {
 	    return responseEntity.getBody();
 	  }
 	  
+	  public T post(String uri, T object, ParameterizedTypeReference<T> responseType) {
+	    HttpEntity<T> requestEntity = new HttpEntity<T>(object, headers);
+	    ResponseEntity<T> responseEntity = rest.exchange(server + uri, HttpMethod.POST, requestEntity, responseType);
+	    this.setStatus(responseEntity.getStatusCode());
+	    return responseEntity.getBody();
+	  }
+	  
 	  
 	  
 	  

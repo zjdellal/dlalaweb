@@ -11,6 +11,7 @@ import com.dlalaweb.service.client.RestClient;
 public class PhonesService {
 	private RestClient<Phone> client;
 	private String phones = "phones/";
+	private String phoneAdd = "addPhone";
 	public PhonesService() {
 		client = new RestClient<>();
 	}
@@ -25,6 +26,14 @@ public class PhonesService {
 		return phoneList;
 		
 	}
+	
+	public Phone save(Phone phone) {
+		Phone phoneSer = client.post(phoneAdd, phone, new ParameterizedTypeReference<Phone>() {
+		});
+		return phoneSer;
+	}
+	
+	
 
 	
 	

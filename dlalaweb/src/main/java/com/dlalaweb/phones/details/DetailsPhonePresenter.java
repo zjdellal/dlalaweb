@@ -3,17 +3,20 @@ package com.dlalaweb.phones.details;
 import java.util.Observable;
 
 import com.dlalacore.dlala.entities.Phone;
+import com.dlalaweb.service.impl.PhonesService;
 import com.dlalaweb.utils.DateFormatterUtil;
 
 public class DetailsPhonePresenter extends Observable implements DetPhoneModelListener {
 
 	private DetailsPhoneView	view;
 	private DetailsPhoneModel	model;
+	private PhonesService			service;
 
 	public DetailsPhonePresenter() {
 		this.view = new DetailsPhoneView();
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
+		setListenersComponents();
 	}
 
 	public DetailsPhonePresenter(Phone phone) {
@@ -21,6 +24,21 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
 		this.model.setSelectedPhone(phone);
+		setListenersComponents();
+
+	}
+
+	private void setListenersComponents() {
+		view.getBtnSave().addClickListener(e -> onBtnSaveClicked());
+
+	}
+
+	private void onBtnSaveClicked() {
+		service = new PhonesService();
+		Phone phone = new Phone();
+		phone.setMarque(view.getTxtMarquePhone().getValue());
+		phone.setModel(view.getTxtModelPhone().getValue());
+		service.save(phone);
 
 	}
 
@@ -33,9 +51,9 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		view.getTxtBatteriePhone().setValue(phone.getEtatBatterie());
 		view.getTxtAccesPhone().setValue(phone.getAccessoires());
 		view.getTxtPrixAchatPhone().setValue(phone.getPrixAchat());
-		view.getTxtPrixVentePhone().setValue(phone.getPrixVente()==null ? "": phone.getPrixVente());
-		view.getTxtCoutRepPhone().setValue(phone.getCoutReparation()==null ? "":phone.getCoutReparation());
-		view.getComboCotePhone().setValue(phone.getCotePhone()==null ? "":phone.getCotePhone());
+		view.getTxtPrixVentePhone().setValue(phone.getPrixVente() == null ? "" : phone.getPrixVente());
+		view.getTxtCoutRepPhone().setValue(phone.getCoutReparation() == null ? "" : phone.getCoutReparation());
+		view.getComboCotePhone().setValue(phone.getCotePhone() == null ? "" : phone.getCotePhone());
 		if (phone.getDateAchat() != null)
 			view.getDateAchatPhone().setValue(DateFormatterUtil.ConvertStringToLocalDate(phone.getDateAchat()));
 		if (phone.getDateVente() != null)
@@ -48,6 +66,5 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	public DetailsPhoneView getView() {
 		return view;
 	}
-	
-	
+
 }

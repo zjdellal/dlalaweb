@@ -45,6 +45,11 @@ public class MyUIControlleur implements Observer, Serializable {
 				UI.getCurrent().addWindow(phone.getView().getWinContent());
 
 			}
+			if(arg.equals("Ajouter téléphone")) {
+				phone = new DetailsPhonePresenter();
+				UI.getCurrent().addWindow(phone.getView().getWinContent());
+				
+			}
 
 		}
 
