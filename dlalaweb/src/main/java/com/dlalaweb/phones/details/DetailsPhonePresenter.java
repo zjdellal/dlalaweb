@@ -1,5 +1,6 @@
 package com.dlalaweb.phones.details;
 
+import java.time.LocalDate;
 import java.util.Observable;
 
 import com.dlalacore.dlala.entities.Phone;
@@ -34,10 +35,22 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	}
 
 	private void onBtnSaveClicked() {
-		service = new PhonesService();
+		
 		Phone phone = new Phone();
 		phone.setMarque(view.getTxtMarquePhone().getValue());
 		phone.setModel(view.getTxtModelPhone().getValue());
+		phone.setEtatBatterie("50%");
+		phone.setAccessoires("Boite");
+		phone.setCotePhone("Affaire");
+		phone.setCoutReparation("10$");
+		phone.setPrixAchat("100$");
+		phone.setPrixVente("0");
+		phone.setDateAchat(LocalDate.now().toString());
+		phone.setDateMaj(LocalDate.now().toString());
+		phone.setDateVente(LocalDate.now().toString());
+		phone.setEtat("neuf");
+		phone.setStatutPhone("disponible");
+		service = new PhonesService();
 		service.save(phone);
 
 	}
