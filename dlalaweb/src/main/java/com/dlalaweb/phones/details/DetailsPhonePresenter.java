@@ -6,6 +6,8 @@ import java.util.Observable;
 import com.dlalacore.dlala.entities.Phone;
 import com.dlalaweb.service.impl.PhonesService;
 import com.dlalaweb.utils.DateFormatterUtil;
+import com.vaadin.ui.Window.CloseEvent;
+import com.vaadin.ui.Window.CloseListener;
 
 public class DetailsPhonePresenter extends Observable implements DetPhoneModelListener {
 
@@ -31,15 +33,21 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 
 	private void setListenersComponents() {
 		view.getBtnSave().addClickListener(e -> onBtnSaveClicked());
+		view.getWinContent().addCloseListener(e -> onWindowsClosed());
+	}
 
+	private void onWindowsClosed() {
+		this.model.setSelectedPhone(null);
+		this.setChanged();
+		this.notifyObservers("close window");
 	}
 
 	private void onBtnSaveClicked() {
 		Phone phone = new Phone();
-		if(model.getSelectedPhone()!= null) {
+		if (model.getSelectedPhone() != null) {
 			phone.setId(model.getSelectedPhone().getId());
 		}
-		
+
 		phone.setMarque(view.getTxtMarquePhone().getValue());
 		phone.setModel(view.getTxtModelPhone().getValue());
 		phone.setEtatBatterie("50%");
@@ -61,12 +69,12 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	@Override
 	public void onPhoneSelected() {
 		Phone phone = model.getSelectedPhone();
-		view.getTxtMarquePhone().setValue(phone.getMarque());
-		view.getTxtModelPhone().setValue(phone.getModel());
-		view.getComboEtatPhone().setValue(phone.getEtat());
-		view.getTxtBatteriePhone().setValue(phone.getEtatBatterie());
-		view.getTxtAccesPhone().setValue(phone.getAccessoires());
-		view.getTxtPrixAchatPhone().setValue(phone.getPrixAchat());
+		view.getTxtMarquePhone().setValue(phone.getMarque() == null ? "" : phone.getMarque());
+		view.getTxtModelPhone().setValue(phone.getModel() == null ? "" : phone.getModel());
+		view.getComboEtatPhone().setValue(phone.getEtat() == null ? "" : phone.getEtat());
+		view.getTxtBatteriePhone().setValue(phone.getEtatBatterie() == null ? "" : phone.getEtatBatterie());
+		view.getTxtAccesPhone().setValue(phone.getAccessoires() == null ? "" : phone.getAccessoires());
+		view.getTxtPrixAchatPhone().setValue(phone.getPrixAchat() == null ? "" : phone.getPrixAchat());
 		view.getTxtPrixVentePhone().setValue(phone.getPrixVente() == null ? "" : phone.getPrixVente());
 		view.getTxtCoutRepPhone().setValue(phone.getCoutReparation() == null ? "" : phone.getCoutReparation());
 		view.getComboCotePhone().setValue(phone.getCotePhone() == null ? "" : phone.getCotePhone());

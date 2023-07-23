@@ -52,6 +52,12 @@ public class MyUIControlleur implements Observer, Serializable {
 			}
 
 		}
+		if(o instanceof DetailsPhonePresenter) {
+			if(arg.equals("close window")) {
+				phones.getView().getgPhones().select(null);
+				System.out.println("select null");
+			}
+		}
 
 	}
 
