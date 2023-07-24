@@ -1,4 +1,4 @@
-package com.dlalaweb.phones.details;
+package com.dlalaweb.phones.details.onglet.Phone;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;

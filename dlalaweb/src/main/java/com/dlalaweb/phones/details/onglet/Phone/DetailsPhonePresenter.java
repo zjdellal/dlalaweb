@@ -1,9 +1,11 @@
-package com.dlalaweb.phones.details;
+package com.dlalaweb.phones.details.onglet.Phone;
 
 import java.time.LocalDate;
 import java.util.Observable;
 
 import com.dlalacore.dlala.entities.Phone;
+import com.dlalaweb.phones.details.DetPhoneModelListener;
+import com.dlalaweb.phones.details.DetailsPhoneModel;
 import com.dlalaweb.service.impl.PhonesService;
 import com.dlalaweb.utils.DateFormatterUtil;
 import com.vaadin.ui.Window.CloseEvent;

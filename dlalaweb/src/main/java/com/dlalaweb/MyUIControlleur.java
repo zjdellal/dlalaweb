@@ -8,7 +8,9 @@ import com.dlalacore.dlala.entities.Phone;
 import com.dlalacore.dlala.entities.Utilisateur;
 import com.dlalaweb.login.LoginPresenter;
 import com.dlalaweb.phones.PhonesPresenter;
-import com.dlalaweb.phones.details.DetailsPhonePresenter;
+import com.dlalaweb.phones.details.DetailsController;
+import com.dlalaweb.phones.details.onglet.Phone.DetailsPhonePresenter;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
@@ -18,6 +20,7 @@ public class MyUIControlleur implements Observer, Serializable {
 	private LoginPresenter				login;
 	private PhonesPresenter				phones;
 	private DetailsPhonePresenter	phone;
+	private DetailsController			detailController;
 
 	public MyUIControlleur() {
 		login = new LoginPresenter();
@@ -42,18 +45,23 @@ public class MyUIControlleur implements Observer, Serializable {
 		if (o instanceof PhonesPresenter) {
 			if (arg instanceof Phone) {
 				phone = new DetailsPhonePresenter((Phone) arg);
-				UI.getCurrent().addWindow(phone.getView().getWinContent());
+				// UI.getCurrent().addWindow(phone.getView().getWinContent());
+				this.detailController = new DetailsController();
+				this.detailController.getView().getTabSheetContent()
+				    .addTab(phone.getView(), "Détails du téléphone", VaadinIcons.PHONE).setClosable(true);
+				;
+				UI.getCurrent().addWindow(detailController.getView().getWinContent());
 
 			}
-			if(arg.equals("Ajouter téléphone")) {
+			if (arg.equals("Ajouter téléphone")) {
 				phone = new DetailsPhonePresenter();
 				UI.getCurrent().addWindow(phone.getView().getWinContent());
-				
+
 			}
 
 		}
-		if(o instanceof DetailsPhonePresenter) {
-			if(arg.equals("close window")) {
+		if (o instanceof DetailsPhonePresenter) {
+			if (arg.equals("close window")) {
 				phones.getView().getgPhones().select(null);
 				System.out.println("select null");
 			}
