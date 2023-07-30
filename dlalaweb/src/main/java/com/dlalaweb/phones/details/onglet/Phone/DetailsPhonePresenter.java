@@ -8,20 +8,21 @@ import com.dlalaweb.phones.details.DetPhoneModelListener;
 import com.dlalaweb.phones.details.DetailsPhoneModel;
 import com.dlalaweb.service.impl.PhonesService;
 import com.dlalaweb.utils.DateFormatterUtil;
-import com.vaadin.ui.Window.CloseEvent;
-import com.vaadin.ui.Window.CloseListener;
+import com.vaadin.data.Binder;
 
 public class DetailsPhonePresenter extends Observable implements DetPhoneModelListener {
 
 	private DetailsPhoneView	view;
 	private DetailsPhoneModel	model;
 	private PhonesService			service;
+	private Binder<Phone>			binder;
 
 	public DetailsPhonePresenter() {
 		this.view = new DetailsPhoneView();
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
 		setListenersComponents();
+		binder();
 	}
 
 	public DetailsPhonePresenter(Phone phone) {
@@ -86,6 +87,29 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 			view.getDateVentePhone().setValue(DateFormatterUtil.ConvertStringToLocalDate(phone.getDateVente()));
 		if (phone.getDateMaj() != null)
 			view.getDateMajPhone().setValue(DateFormatterUtil.ConvertStringToLocalDate(phone.getDateMaj()));
+
+	}
+
+	private void binder() {
+		binder = new Binder<>();
+
+		//marque
+		binder.forField(view.getTxtMarquePhone())
+		    .withValidator(marque -> marque.length() >= 2 && marque.matches("^[a-zA-Z]*$"), "Saisie incorrecte")
+		    .bind(Phone::getMarque, Phone::setMarque);
+		//model
+		binder.forField(view.getTxtModelPhone()).withValidator(model -> model.length() >= 2, "Champs obligatoire")
+		    .bind(Phone::getModel, Phone::setModel);
+		//imei
+		binder.forField(view.getTxtImei())
+		    .withValidator(imei -> imei.length() > 0 && imei.matches("\\d+"), "Champs numéric obligatoire")
+		    .bind(Phone::getImeiPhone, Phone::setImeiPhone);
+		
+		//no model
+//		binder.forField(view.getTxtNoModel()).withValidator(noModel -> noModel.length() > 0, "Champs obligatoire")
+//    .bind(Phone::getNoModelPhone, Phone::setNoModelPhone);
+		
+		binder.forField(view.getTxtNoModel()).asRequired("obligatoire !!!!");
 
 	}
 

@@ -45,7 +45,6 @@ public class MyUIControlleur implements Observer, Serializable {
 		if (o instanceof PhonesPresenter) {
 			if (arg instanceof Phone) {
 				phone = new DetailsPhonePresenter((Phone) arg);
-				// UI.getCurrent().addWindow(phone.getView().getWinContent());
 				this.detailController = new DetailsController();
 				this.detailController.getView().getTabSheetContent()
 				    .addTab(phone.getView(), "Détails du téléphone", VaadinIcons.PHONE).setClosable(true);

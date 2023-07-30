@@ -5,15 +5,17 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
 public class DetailsPhoneView extends VerticalLayout {
+
 	private TextField					txtMarquePhone, txtModelPhone, txtBatteriePhone, txtPrixAchatPhone, txtPrixVentePhone;
 	// accessoires téléphones
-	private TextField					txtAccesPhone;
+	private TextField					txtAccesPhone, txtImei, txtNoModel, txtBenefice;
 	// couts réparation vente;
 	private TextField					txtCoutRepPhone;
 
@@ -42,6 +44,7 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.buidLigneHl1();
 		this.buidLigneHl2();
 		this.buidLigneHl3();
+		this.buidLigneHl4();
 		this.buildButtonSide();
 	}
 
@@ -65,10 +68,10 @@ public class DetailsPhoneView extends VerticalLayout {
 		hl2.setWidth("100%");
 
 		this.txtAccesPhone = new TextField("Accessoires avec le téléphone");
-		this.txtPrixAchatPhone = new TextField("Prix d'achat");
-		this.txtPrixVentePhone = new TextField("Prix de vente");
-		this.txtCoutRepPhone = new TextField("Coût des réparations");
-		hl2.addComponents(txtAccesPhone, txtPrixAchatPhone, txtPrixVentePhone, txtCoutRepPhone);
+		this.txtImei = new TextField("IMEI");
+		this.txtNoModel = new TextField("No model");
+		this.txtBenefice = new TextField("Bénéfice");
+		hl2.addComponents(txtAccesPhone, txtImei, txtNoModel, txtBenefice);
 		this.addComponent(hl2);
 
 	}
@@ -85,6 +88,20 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.addComponent(hl3);
 
 	}
+
+	private void buidLigneHl4() {
+		HorizontalLayout hl4 = new HorizontalLayout();
+		hl4.setMargin(false);
+		hl4.setWidth("100%");
+
+		this.txtPrixAchatPhone = new TextField("Prix d'achat");
+		this.txtPrixVentePhone = new TextField("Prix de vente");
+		this.txtCoutRepPhone = new TextField("Coûts de réparation");
+		hl4.addComponents(txtPrixAchatPhone, txtPrixVentePhone, txtCoutRepPhone, new Label());
+		this.addComponent(hl4);
+
+	}
+	// xtPrixAchatPhone, txtPrixVentePhone
 
 	private void buildButtonSide() {
 		btnSave = new Button("Enregistrer");
@@ -148,6 +165,19 @@ public class DetailsPhoneView extends VerticalLayout {
 	public Button getBtnSave() {
 		return btnSave;
 	}
+
+	public TextField getTxtImei() {
+		return txtImei;
+	}
+
+	public TextField getTxtNoModel() {
+		return txtNoModel;
+	}
+
+	public TextField getTxtBenefice() {
+		return txtBenefice;
+	}
+	
 	
 
 }
