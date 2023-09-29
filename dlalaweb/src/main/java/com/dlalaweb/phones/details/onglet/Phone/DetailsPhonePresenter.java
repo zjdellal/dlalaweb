@@ -1,7 +1,13 @@
 package com.dlalaweb.phones.details.onglet.Phone;
 
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
 
 import com.dlalacore.dlala.entities.Fiche;
 import com.dlalacore.dlala.entities.Phone;
@@ -10,6 +16,8 @@ import com.dlalaweb.phones.details.DetailsPhoneModel;
 import com.dlalaweb.service.impl.FicheService;
 import com.dlalaweb.service.impl.PhonesService;
 import com.dlalaweb.utils.ConverterLocalDateToString;
+import com.dlalaweb.utils.ConverterStatutEnumToString;
+import com.dlalaweb.utils.StatutEnum;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 
@@ -25,10 +33,16 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
 		setListenersComponents();
+		setComponents();
 		binder = new Binder<>(Phone.class);
 		binder();
 		binder.setBean(model.getSelectedPhone());
 
+	}
+
+	private void setComponents() {
+		Set<StatutEnum> set = EnumSet.allOf(StatutEnum.class);
+		view.getComboBoxStatutPhone().setItems(set);
 	}
 
 	public DetailsPhonePresenter(Phone phone) {
@@ -37,6 +51,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		this.model.setListener(this);
 		this.model.setSelectedPhone(phone);
 		setListenersComponents();
+		setComponents();
+
 		binder = new Binder<>(Phone.class);
 		binder.setBean(phone);
 		binder.readBean(model.getSelectedPhone());
@@ -77,10 +93,14 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 
 		try {
 			binder.writeBean(model.getSelectedPhone());
+			LocalDate now = LocalDate.now();
+
+			model.getSelectedPhone().setDateMaj(String.valueOf(now));
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		service = new PhonesService();
 		service.save(model.getSelectedPhone());
 
@@ -89,18 +109,27 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	@Override
 	public void onPhoneSelected() {
 		Phone phone = model.getSelectedPhone();
+		FicheService fiche = new FicheService();
+		// lr = liste de réparations
+		List<Fiche> lr = fiche.getFichesByIdPhone(phone.getId());
+		if (!lr.isEmpty())
+			view.getTxtCoutRepPhone().setValue(getTotalCoutReparation(lr));
 
 		if (phone.getPrixVente() != null && phone.getPrixAchat() != null) {
-			String subVente = phone.getPrixVente().substring(0, phone.getPrixVente().length() - 5);
-			String subachat = phone.getPrixAchat().substring(0, phone.getPrixAchat().length() - 5);
-			Double ben = Double.parseDouble(subVente) - Double.parseDouble(subachat);
+			Double ben = (double) 0;
+			double subVente = Double.parseDouble(phone.getPrixVente());
+			double subAchat = Double.parseDouble(phone.getPrixAchat());
+			;
+			if (Double.parseDouble(view.getTxtCoutRepPhone().getValue()) > 0) {
+				subAchat += Double.parseDouble(view.getTxtCoutRepPhone().getValue());
+
+			}
+
+			ben = subVente - subAchat;
+
 			view.getTxtBenefice().setValue(String.valueOf(ben));
 		}
 
-		FicheService fiche = new FicheService();
-		List<Fiche> ff = fiche.getFichesByIdPhone(phone.getId());
-		if (!ff.isEmpty())
-			view.getTxtCoutRepPhone().setValue(getTotalCoutReparation(ff));
 		// view.getTxtMarquePhone().setValue(phone.getMarque() == null ? "" :
 		// phone.getMarque());
 		// view.getTxtModelPhone().setValue(phone.getModel() == null ? "" :
@@ -132,9 +161,9 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		double total = (double) 0;
 		for (Fiche f : fiches) {
 			if (f.getCout() != null) {
-				String subCout = f.getCout().substring(0, f.getCout().length() - 2);
-				if(Double.parseDouble(subCout) > 0 )
-				total += Double.parseDouble(subCout);
+				String subCout = f.getCout();
+				if (Double.parseDouble(subCout) > 0)
+					total += Double.parseDouble(subCout);
 			}
 
 		}
@@ -198,6 +227,9 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		binder.forField(view.getTxtPrixVentePhone())
 		    .withValidator(vente -> vente.matches("\\d+"), "Champs numéric seulement")
 		    .bind(Phone::getPrixVente, Phone::setPrixVente);
+		// comboStatut
+		binder.forField(view.getComboBoxStatutPhone()).withConverter(new ConverterStatutEnumToString())
+		    .bind(Phone::getStatutPhone, Phone::setStatutPhone);
 
 	}
 

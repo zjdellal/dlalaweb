@@ -1,5 +1,6 @@
 package com.dlalaweb.phones.details.onglet.Phone;
 
+import com.dlalaweb.utils.StatutEnum;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -9,6 +10,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 @SuppressWarnings("serial")
 public class DetailsPhoneView extends VerticalLayout {
@@ -24,6 +26,11 @@ public class DetailsPhoneView extends VerticalLayout {
 	private Button						btnSave;
 
 	private Window						winContent;
+	private Label							lblMonnaieCoutRep;
+	private Label							lblMonnaiePrixAchat;
+	private Label							lblMonnaiePrixVente;
+	private Label							lblMonnaieBenefice;
+	private ComboBox<StatutEnum> comboBoxStatutPhone;
 
 	public DetailsPhoneView() {
 		this.setSizeFull();
@@ -70,8 +77,8 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.txtAccesPhone = new TextField("Accessoires avec le téléphone");
 		this.txtImei = new TextField("IMEI");
 		this.txtNoModel = new TextField("No model");
-		this.txtBenefice = new TextField("Bénéfice");
-		hl2.addComponents(txtAccesPhone, txtImei, txtNoModel, txtBenefice);
+		comboBoxStatutPhone = new ComboBox<>("Statut");
+		hl2.addComponents(txtAccesPhone, txtImei, txtNoModel, comboBoxStatutPhone);
 		this.addComponent(hl2);
 
 	}
@@ -95,9 +102,29 @@ public class DetailsPhoneView extends VerticalLayout {
 		hl4.setWidth("100%");
 
 		this.txtPrixAchatPhone = new TextField("Prix d'achat");
+		lblMonnaiePrixAchat = new Label("$ Cad");
+		lblMonnaiePrixAchat.setStyleName(ValoTheme.LABEL_BOLD);
+		lblMonnaiePrixAchat.setStyleName(ValoTheme.LABEL_H3);
+		HorizontalLayout hlPrixAchat = new HorizontalLayout(txtPrixAchatPhone, lblMonnaiePrixAchat);
 		this.txtPrixVentePhone = new TextField("Prix de vente");
+		lblMonnaiePrixVente = new Label("$ Cad");
+		lblMonnaiePrixVente.setStyleName(ValoTheme.LABEL_BOLD);
+		lblMonnaiePrixVente.setStyleName(ValoTheme.LABEL_H3);
+		HorizontalLayout hlPrixVente = new HorizontalLayout(txtPrixVentePhone, lblMonnaiePrixVente);
 		this.txtCoutRepPhone = new TextField("Coûts de réparation");
-		hl4.addComponents(txtPrixAchatPhone, txtPrixVentePhone, txtCoutRepPhone, new Label());
+		lblMonnaieCoutRep = new Label("$ Cad");
+		lblMonnaieCoutRep.setStyleName(ValoTheme.LABEL_BOLD);
+		lblMonnaieCoutRep.setStyleName(ValoTheme.LABEL_H3);
+		HorizontalLayout hlCout = new HorizontalLayout(txtCoutRepPhone, lblMonnaieCoutRep);
+		hlCout.setMargin(false);
+		hlCout.setSpacing(true);
+		hlCout.setComponentAlignment(lblMonnaieCoutRep, Alignment.BOTTOM_CENTER);
+		this.txtBenefice = new TextField("Bénéfice");
+		lblMonnaieBenefice = new Label("$ Cad");
+		lblMonnaieBenefice.setStyleName(ValoTheme.LABEL_BOLD);
+		lblMonnaieBenefice.setStyleName(ValoTheme.LABEL_H3);
+		HorizontalLayout hlBenefice = new HorizontalLayout(txtBenefice, lblMonnaieBenefice);
+		hl4.addComponents(hlPrixVente,hlPrixAchat, hlCout, hlBenefice);
 		this.addComponent(hl4);
 
 	}
@@ -177,7 +204,26 @@ public class DetailsPhoneView extends VerticalLayout {
 	public TextField getTxtBenefice() {
 		return txtBenefice;
 	}
-	
-	
 
+	public Label getLblMonnaieCoutRep() {
+		return lblMonnaieCoutRep;
+	}
+
+	public Label getLblMonnaiePrixAchat() {
+		return lblMonnaiePrixAchat;
+	}
+
+	public Label getLblMonnaiePrixVente() {
+		return lblMonnaiePrixVente;
+	}
+
+	public Label getLblMonnaieBenefice() {
+		return lblMonnaieBenefice;
+	}
+
+	public ComboBox<StatutEnum> getComboBoxStatutPhone() {
+		return comboBoxStatutPhone;
+	}
+
+	
 }
