@@ -12,7 +12,6 @@ import com.dlalaweb.phones.details.DetailsController;
 import com.dlalaweb.phones.details.onglet.Phone.DetailsPhonePresenter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
@@ -48,7 +47,7 @@ public class MyUIControlleur implements Observer, Serializable {
 				this.detailController = new DetailsController();
 				this.detailController.getView().getTabSheetContent()
 				    .addTab(phone.getView(), "Détails du téléphone", VaadinIcons.PHONE).setClosable(true);
-				;
+
 				UI.getCurrent().addWindow(detailController.getView().getWinContent());
 
 			}
