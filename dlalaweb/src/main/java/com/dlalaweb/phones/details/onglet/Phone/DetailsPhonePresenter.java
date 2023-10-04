@@ -24,6 +24,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	private DetailsPhoneModel	model;
 	private PhonesService			service;
 	private Binder<Phone>			binder;
+	private List<Fiche> historeparations;
 
 	public DetailsPhonePresenter() {
 		this.view = new DetailsPhoneView();
@@ -54,6 +55,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		binder.setBean(phone);
 		binder.readBean(model.getSelectedPhone());
 		binder();
+		model.setFiche(historeparations);
+
 
 	}
 
@@ -108,9 +111,9 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		Phone phone = model.getSelectedPhone();
 		FicheService fiche = new FicheService();
 		// lr = liste de réparations
-		List<Fiche> lr = fiche.getFichesByIdPhone(phone.getId());
-		if (!lr.isEmpty())
-			view.getTxtCoutRepPhone().setValue(getTotalCoutReparation(lr));
+		historeparations = fiche.getFichesByIdPhone(phone.getId());
+		if (!historeparations.isEmpty()) 
+			view.getTxtCoutRepPhone().setValue(getTotalCoutReparation(historeparations));
 
 		if (phone.getPrixVente() != null && phone.getPrixAchat() != null) {
 			Double ben = (double) 0;
@@ -234,4 +237,16 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		return view;
 	}
 
+	@Override
+	public void ifFicheExiste() {
+		setChanged();
+		notifyObservers("Historique éxistante");
+		
+	}
+
+	public List<Fiche> getHistoreparations() {
+		return model.getSelectedPhone().getFiches();
+	}
+
+	
 }

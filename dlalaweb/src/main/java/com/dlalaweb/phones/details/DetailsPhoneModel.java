@@ -1,10 +1,14 @@
 package com.dlalaweb.phones.details;
 
+import java.util.List;
+
+import com.dlalacore.dlala.entities.Fiche;
 import com.dlalacore.dlala.entities.Phone;
 
 public class DetailsPhoneModel {
 	private DetPhoneModelListener	listener;
 	private Phone									selectedPhone;
+	
 
 	public DetailsPhoneModel() {
 
@@ -22,6 +26,12 @@ public class DetailsPhoneModel {
 		return selectedPhone;
 	}
 
+	public void setFiche(List<Fiche> fiche) {
+		selectedPhone.setFiches(fiche);
+		if(selectedPhone.getFiches()!= null && listener != null)
+			listener.ifFicheExiste();
+		
+	}
 	public void setSelectedPhone(Phone selectedPhone) {
 		this.selectedPhone = selectedPhone;
 		if (selectedPhone != null && listener != null) {
