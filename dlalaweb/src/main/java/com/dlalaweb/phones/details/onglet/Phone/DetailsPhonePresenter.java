@@ -25,8 +25,10 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	private PhonesService			service;
 	private Binder<Phone>			binder;
 	private List<Fiche> historeparations;
+	private boolean isNew = false;
 
 	public DetailsPhonePresenter() {
+		isNew =  true;
 		this.view = new DetailsPhoneView();
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
@@ -72,37 +74,31 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	}
 
 	private void onBtnSaveClicked() {
-		Phone phone = new Phone();
-		if (model.getSelectedPhone() != null) {
-			phone.setId(model.getSelectedPhone().getId());
+		if(isNew) {
+			Phone phone = new Phone();
+			phone.setId(0);	
+			
+			if (model.getSelectedPhone() != null) {
+				phone.setId(model.getSelectedPhone().getId());
+			}else
+				model.setSelectedPhone(phone);
 		}
+		
 
-		// phone.setMarque(view.getTxtMarquePhone().getValue());
-		// phone.setModel(view.getTxtModelPhone().getValue());
-		// phone.setEtatBatterie("50%");
-		// phone.setAccessoires("Boite");
-		// phone.setCotePhone("Affaire");
-		// phone.setCoutReparation("10$");
-		// phone.setPrixAchat("100$");
-		// phone.setPrixVente("0");
-		// phone.setDateAchat(LocalDate.now().toString());
-		// phone.setDateMaj(LocalDate.now().toString());
-		// phone.setDateVente(LocalDate.now().toString());
-		// phone.setEtat("neuf");
-		// phone.setStatutPhone("disponible");
 
 		try {
 			binder.writeBean(model.getSelectedPhone());
 			LocalDate now = LocalDate.now();
-
 			model.getSelectedPhone().setDateMaj(String.valueOf(now));
+			service = new PhonesService();
+			service.save(model.getSelectedPhone());
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		}
 
-		service = new PhonesService();
-		service.save(model.getSelectedPhone());
+
 
 	}
 
@@ -114,6 +110,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		historeparations = fiche.getFichesByIdPhone(phone.getId());
 		if (!historeparations.isEmpty()) 
 			view.getTxtCoutRepPhone().setValue(getTotalCoutReparation(historeparations));
+		else
+			view.getTxtCoutRepPhone().setValue("0");
 
 		if (phone.getPrixVente() != null && phone.getPrixAchat() != null) {
 			Double ben = (double) 0;
@@ -130,30 +128,6 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 			view.getTxtBenefice().setValue(String.valueOf(ben));
 		}
 
-		// view.getTxtMarquePhone().setValue(phone.getMarque() == null ? "" :
-		// phone.getMarque());
-		// view.getTxtModelPhone().setValue(phone.getModel() == null ? "" :
-		// phone.getModel());
-		// view.getComboEtatPhone().setValue(phone.getEtat() == null ? "" :
-		// phone.getEtat());
-		// view.getTxtBatteriePhone().setValue(phone.getEtatBatterie() == null ? "" :
-		// phone.getEtatBatterie());
-		// view.getTxtAccesPhone().setValue(phone.getAccessoires() == null ? "" :
-		// phone.getAccessoires());
-		// view.getTxtPrixAchatPhone().setValue(phone.getPrixAchat() == null ? "" :
-		// phone.getPrixAchat());
-		// view.getTxtPrixVentePhone().setValue(phone.getPrixVente() == null ? "" :
-		// phone.getPrixVente());
-		// view.getTxtCoutRepPhone().setValue(phone.getCoutReparation() == null ? "" :
-		// phone.getCoutReparation());
-		// view.getComboCotePhone().setValue(phone.getCotePhone() == null ? "" :
-		// phone.getCotePhone());
-		// if (phone.getDateAchat() != null)
-		// view.getDateAchatPhone().setValue(DateFormatterUtil.ConvertStringToLocalDate(phone.getDateAchat()));
-		// if (phone.getDateVente() != null)
-		// view.getDateVentePhone().setValue(DateFormatterUtil.ConvertStringToLocalDate(phone.getDateVente()));
-		// if (phone.getDateMaj() != null)
-		// view.getDateMajPhone().setValue(DateFormatterUtil.ConvertStringToLocalDate(phone.getDateMaj()));
 
 	}
 

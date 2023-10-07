@@ -18,6 +18,7 @@ public class DetailsController extends Observable implements Observer {
 		this.view =  new DetailsView();
 		detailsPhone  =  new DetailsPhonePresenter();
 		detailsPhone.addObserver(this);
+		setListeners();
 	}
 
 	public DetailsController(Phone phoneSelected) {
@@ -31,26 +32,23 @@ if(!detailsPhone.getHistoreparations().isEmpty()) {
 
 		this.getView().getTabSheetContent().setSelectedTab(0);
 }
+setListeners();
 
 	}
 	
+	private void setListeners() {
+		this.view.getWinContent().addCloseListener(e -> onWindowsClosed());
+		
+	}
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof DetailsPhonePresenter) {
-//		if (arg.equals("Historique éxistante")) {
-//			historique = new HistoReparationsPresenter(phone.getHistoreparations());
-//			historique.addObserver(this);
-//			this.detailController.getView().getTabSheetContent()
-//			    .addTab(historique.getView().getContent(), "Historique de réparation", VaadinIcons.BOOKMARK)
-//			    .setClosable(false);
-//
+//		if (arg.equals("close window")) {
+//			setChanged();
+//			notifyObservers("close window");
+//			
+//			
 //		}
-		if (arg.equals("close window")) {
-			setChanged();
-			notifyObservers("close window");
-			
-			
-		}
 		if(arg.equals("Historique éxistante")){
 			
 			
@@ -76,6 +74,23 @@ if(!detailsPhone.getHistoreparations().isEmpty()) {
 		 return getView().getWinContent();
 	}
 
+	public DetailsPhonePresenter getDetailsPhone() {
+		return detailsPhone;
+	}
+
+	public HistoReparationsPresenter getHistorique() {
+		return historique;
+	}
+	
+	private void onWindowsClosed() {
+		
+		this.setChanged();
+		this.notifyObservers("close window");
+	}
+
+
+	
+	
 
 	
 	

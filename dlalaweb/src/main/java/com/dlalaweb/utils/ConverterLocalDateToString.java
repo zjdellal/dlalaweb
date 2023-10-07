@@ -22,9 +22,10 @@ public class ConverterLocalDateToString implements Converter<LocalDate, String> 
 	
 		if(value != null)
 		return LocalDate.parse(value);
-		else
-			return LocalDate.now();
-		
+//		else
+//			return LocalDate.now();
+//		
+		return null;
 	}
 
 
