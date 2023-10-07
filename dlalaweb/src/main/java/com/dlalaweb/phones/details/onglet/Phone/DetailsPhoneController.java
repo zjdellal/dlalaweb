@@ -3,17 +3,17 @@ package com.dlalaweb.phones.details.onglet.Phone;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.dlalaweb.phones.details.onglet.historiquereparations.HistoriqueReparationsController;
+import com.dlalaweb.phones.details.onglet.reparations.ReparationsController;
 
 public class DetailsPhoneController extends Observable implements Observer {
 	private DetailsPhonePresenter						detailsPhonePresenter;
-	private HistoriqueReparationsController	histReparation;
+	private ReparationsController	histReparation;
 
 	public DetailsPhoneController() {
 		detailsPhonePresenter = new DetailsPhonePresenter();
 		detailsPhonePresenter.addObserver(this);
-		histReparation = new HistoriqueReparationsController();
-		histReparation.addObserver(this);
+//		histReparation = new ReparationsController();
+//		histReparation.addObserver(this);
 	}
 
 	@Override

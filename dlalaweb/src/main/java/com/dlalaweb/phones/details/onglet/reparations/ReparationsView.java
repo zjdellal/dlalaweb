@@ -1,4 +1,4 @@
-package com.dlalaweb.phones.details.onglet.historiquereparations;
+package com.dlalaweb.phones.details.onglet.reparations;
 
 import com.dlalacore.dlala.entities.Fiche;
 import com.vaadin.ui.Alignment;
@@ -8,13 +8,13 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class HistoreparationsView {
+public class ReparationsView {
 	private VerticalLayout	vContent;
 	private Label						lblCaption;
 	private Grid<Fiche>			gFiche;
 	private Button					btnAjouter;
 
-	public HistoreparationsView() {
+	public ReparationsView() {
 		vContent = new VerticalLayout();
 		vContent.setSizeFull();
 		vContent.setCaption("<b>Historique de réparations:</b>");

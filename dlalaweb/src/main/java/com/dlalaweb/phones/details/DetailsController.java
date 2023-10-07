@@ -5,14 +5,15 @@ import java.util.Observer;
 
 import com.dlalacore.dlala.entities.Phone;
 import com.dlalaweb.phones.details.onglet.Phone.DetailsPhonePresenter;
-import com.dlalaweb.phones.details.onglet.historiquereparations.HistoReparationsPresenter;
+import com.dlalaweb.phones.details.onglet.reparations.ReparationsController;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Window;
 
 public class DetailsController extends Observable implements Observer {
 	private DetailsView view;
 	private DetailsPhonePresenter			detailsPhone;
-	private HistoReparationsPresenter	historique;
+//	private ReparationsPresenter	historique;
+	private ReparationsController reparationsController;
 	
 	public DetailsController() {
 		this.view =  new DetailsView();
@@ -51,16 +52,22 @@ setListeners();
 //		}
 		if(arg.equals("Historique éxistante")){
 			
+			this.reparationsController =  new ReparationsController(detailsPhone.getHistoreparations());
 			
-			historique = new HistoReparationsPresenter(detailsPhone.getHistoreparations());
-			historique.addObserver(this);
+			reparationsController.addObserver(this);
 		this.getView().getTabSheetContent()
-		    .addTab(historique.getView().getContent(), "Historique de réparation", VaadinIcons.BOOKMARK)
+		    .addTab(reparationsController.getReparationsPresenter().getView().getContent(), "Historique de réparation", VaadinIcons.BOOKMARK)
 		    .setClosable(false);
 		this.getView().getTabSheetContent().setSelectedTab(0);
 			
 		}
 	}
+//		if(o instanceof ReparationsPresenter) {
+//			if(arg instanceof ReparationsPresenter) {
+//				Fiche fiche  = (Fiche) arg;
+//				// lancer le prenseter raparation details
+//			}
+//		}
 
 	}
 
@@ -78,9 +85,9 @@ setListeners();
 		return detailsPhone;
 	}
 
-	public HistoReparationsPresenter getHistorique() {
-		return historique;
-	}
+//	public ReparationsPresenter getHistorique() {
+//		return historique;
+//	}
 	
 	private void onWindowsClosed() {
 		
