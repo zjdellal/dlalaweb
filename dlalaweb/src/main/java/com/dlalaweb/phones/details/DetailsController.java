@@ -10,37 +10,40 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Window;
 
 public class DetailsController extends Observable implements Observer {
-	private DetailsView view;
-	private DetailsPhonePresenter			detailsPhone;
-//	private ReparationsPresenter	historique;
-	private ReparationsController reparationsController;
-	
+	private DetailsView						view;
+	private DetailsPhonePresenter	detailsPhone;
+	// private ReparationsPresenter historique;
+	private ReparationsController	reparationsController;
+	private Phone									phoneSelected;
+
 	public DetailsController() {
-		this.view =  new DetailsView();
-		detailsPhone  =  new DetailsPhonePresenter();
+		this.view = new DetailsView();
+		detailsPhone = new DetailsPhonePresenter();
 		detailsPhone.addObserver(this);
 		setListeners();
 	}
 
 	public DetailsController(Phone phoneSelected) {
-		this.view =  new DetailsView();
-		detailsPhone  =  new DetailsPhonePresenter(phoneSelected);
+		this.phoneSelected = phoneSelected;
+		this.view = new DetailsView();
+		detailsPhone = new DetailsPhonePresenter(phoneSelected);
 		detailsPhone.addObserver(this);
-		this.getView().getTabSheetContent()
-    .addTab(detailsPhone.getView(), "Détails du téléphone", VaadinIcons.PHONE).setClosable(true);
-if(!detailsPhone.getHistoreparations().isEmpty()) {
-		detailsPhone.ifFicheExiste();
+		this.getView().getTabSheetContent().addTab(detailsPhone.getView(), "Détails du téléphone", VaadinIcons.PHONE)
+		    .setClosable(true);
+		if (!detailsPhone.getHistoreparations().isEmpty()) {
+			detailsPhone.ifFicheExiste();
 
-		this.getView().getTabSheetContent().setSelectedTab(0);
-}
-setListeners();
+			this.getView().getTabSheetContent().setSelectedTab(0);
+		}
+		setListeners();
 
 	}
-	
+
 	private void setListeners() {
 		this.view.getWinContent().addCloseListener(e -> onWindowsClosed());
-		
+
 	}
+
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof DetailsPhonePresenter) {
@@ -52,7 +55,7 @@ setListeners();
 //		}
 		if(arg.equals("Historique éxistante")){
 			
-			this.reparationsController =  new ReparationsController(detailsPhone.getHistoreparations());
+			this.reparationsController =  new ReparationsController(detailsPhone.getHistoreparations(), this.phoneSelected);
 			
 			reparationsController.addObserver(this);
 		this.getView().getTabSheetContent()
@@ -74,32 +77,25 @@ setListeners();
 	public DetailsView getView() {
 		return view;
 	}
-	
+
 	public Window getOngletPhone() {
-		 this.getView().getTabSheetContent()
-		    .addTab(detailsPhone.getView(), "Détails du téléphone", VaadinIcons.PHONE).setClosable(true);
-		 return getView().getWinContent();
+		this.getView().getTabSheetContent().addTab(detailsPhone.getView(), "Détails du téléphone", VaadinIcons.PHONE)
+		    .setClosable(true);
+		return getView().getWinContent();
 	}
 
 	public DetailsPhonePresenter getDetailsPhone() {
 		return detailsPhone;
 	}
 
-//	public ReparationsPresenter getHistorique() {
-//		return historique;
-//	}
-	
+	// public ReparationsPresenter getHistorique() {
+	// return historique;
+	// }
+
 	private void onWindowsClosed() {
-		
+
 		this.setChanged();
 		this.notifyObservers("close window");
 	}
-
-
-	
-	
-
-	
-	
 
 }

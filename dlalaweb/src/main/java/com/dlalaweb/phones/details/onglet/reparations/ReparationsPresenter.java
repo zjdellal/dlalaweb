@@ -9,7 +9,7 @@ import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.Grid.SelectionMode;
 
 public class ReparationsPresenter extends Observable {
-	private ReparationsView	view;
+	private ReparationsView		view;
 	private ReparationsModel	model;
 
 	public ReparationsPresenter(List<Fiche> historeparations) {
