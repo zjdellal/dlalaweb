@@ -30,7 +30,7 @@ public class DetailsView {
 		menuBarre.setHeightUndefined();
 		this.tabSheetContent = new TabSheet();
 		this.tabSheetContent.setSizeFull();
-		this.vContent.addComponent(menuBarre);
+//		this.vContent.addComponent(menuBarre);
 		this.vContent.addComponent(tabSheetContent);
 		this.vContent.setExpandRatio(tabSheetContent, 1.85f);
 	}

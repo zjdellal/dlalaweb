@@ -2,6 +2,7 @@ package com.dlalaweb.phones.details.onglet.reparations.details;
 
 import com.dlalacore.dlala.entities.Phone;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -21,6 +22,7 @@ public class DetailsReparationView {
 	private Label						lblNomTel, lblModel, lblNoModel, lblMarque;
 	private FormLayout			fLayout;
 	private Label						lblMonnaieCout;
+	private Button btnEnregistrer;
 
 	public DetailsReparationView() {
 		vContent = new VerticalLayout();
@@ -65,6 +67,9 @@ public class DetailsReparationView {
 
 		vContent.addComponents(h, txtDetail);
 		vContent.setComponentAlignment(txtDetail, Alignment.BOTTOM_LEFT);
+		this.btnEnregistrer =  new Button("Enregistrer");
+		this.vContent.addComponent(btnEnregistrer);
+		this.vContent.setComponentAlignment(btnEnregistrer, Alignment.MIDDLE_CENTER);
 
 	}
 

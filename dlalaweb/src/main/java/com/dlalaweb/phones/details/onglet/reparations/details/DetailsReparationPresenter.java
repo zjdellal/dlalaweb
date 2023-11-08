@@ -18,6 +18,21 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 		model.setSelectedPhone(phone);
 
 	}
+	
+	public DetailsReparationPresenter(Phone phone) {
+		view = new DetailsReparationView();
+		model = new DetailsReparationModel();
+		
+		model.setListener(this);
+		model.setSelectedPhone(phone);
+
+		setListeners();
+		}
+
+	private void setListeners() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void onFicheSelected() {

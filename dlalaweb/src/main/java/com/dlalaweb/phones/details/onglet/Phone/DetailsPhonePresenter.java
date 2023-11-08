@@ -17,6 +17,7 @@ import com.dlalaweb.utils.ConverterStatutEnumToString;
 import com.dlalaweb.utils.StatutEnum;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.ui.Button.ClickEvent;
 
 public class DetailsPhonePresenter extends Observable implements DetPhoneModelListener {
 
@@ -24,11 +25,11 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	private DetailsPhoneModel	model;
 	private PhonesService			service;
 	private Binder<Phone>			binder;
-	private List<Fiche> historeparations;
-	private boolean isNew = false;
+	private List<Fiche>				historeparations;
+	private boolean						isNew	= false;
 
 	public DetailsPhonePresenter() {
-		isNew =  true;
+		isNew = true;
 		this.view = new DetailsPhoneView();
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
@@ -59,12 +60,18 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		binder();
 		model.setFiche(historeparations);
 
-
 	}
 
 	private void setListenersComponents() {
 		view.getBtnSave().addClickListener(e -> onBtnSaveClicked());
 		view.getWinContent().addCloseListener(e -> onWindowsClosed());
+		view.getBtnAjouterReparation().addClickListener(e -> onbtnAdReparationClicked(e));
+		view.getBtnDeletPhone().addClickListener(e -> onbtnAdReparationClicked(e));
+	}
+
+	private void onbtnAdReparationClicked(ClickEvent e) {
+		setChanged();
+		notifyObservers(e.getButton().getCaption());
 	}
 
 	private void onWindowsClosed() {
@@ -74,17 +81,15 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	}
 
 	private void onBtnSaveClicked() {
-		if(isNew) {
+		if (isNew) {
 			Phone phone = new Phone();
-			phone.setId(0);	
-			
+			phone.setId(0);
+
 			if (model.getSelectedPhone() != null) {
 				phone.setId(model.getSelectedPhone().getId());
-			}else
+			} else
 				model.setSelectedPhone(phone);
 		}
-		
-
 
 		try {
 			binder.writeBean(model.getSelectedPhone());
@@ -95,10 +100,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+
 		}
-
-
 
 	}
 
@@ -108,7 +111,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		FicheService fiche = new FicheService();
 		// lr = liste de réparations
 		historeparations = fiche.getFichesByIdPhone(phone.getId());
-		if (!historeparations.isEmpty()) 
+		if (!historeparations.isEmpty())
 			view.getTxtCoutRepPhone().setValue(getTotalCoutReparation(historeparations));
 		else
 			view.getTxtCoutRepPhone().setValue("0");
@@ -127,7 +130,6 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 
 			view.getTxtBenefice().setValue(String.valueOf(ben));
 		}
-
 
 	}
 
@@ -215,12 +217,11 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	public void ifFicheExiste() {
 		setChanged();
 		notifyObservers("Historique éxistante");
-		
+
 	}
 
 	public List<Fiche> getHistoreparations() {
 		return model.getSelectedPhone().getFiches();
 	}
 
-	
 }

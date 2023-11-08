@@ -47,30 +47,39 @@ public class DetailsController extends Observable implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof DetailsPhonePresenter) {
-//		if (arg.equals("close window")) {
-//			setChanged();
-//			notifyObservers("close window");
-//			
-//			
-//		}
-		if(arg.equals("Historique éxistante")){
-			
-			this.reparationsController =  new ReparationsController(detailsPhone.getHistoreparations(), this.phoneSelected);
-			
-			reparationsController.addObserver(this);
-		this.getView().getTabSheetContent()
-		    .addTab(reparationsController.getReparationsPresenter().getView().getContent(), "Historique de réparation", VaadinIcons.BOOKMARK)
-		    .setClosable(false);
-		this.getView().getTabSheetContent().setSelectedTab(0);
-			
+			// if (arg.equals("close window")) {
+			// setChanged();
+			// notifyObservers("close window");
+			//
+			//
+			// }
+			if (arg.equals("Historique éxistante")) {
+
+				this.reparationsController = new ReparationsController(detailsPhone.getHistoreparations(), this.phoneSelected);
+
+				reparationsController.addObserver(this);
+				this.getView().getTabSheetContent()
+				    .addTab(reparationsController.getReparationsPresenter().getView().getContent(), "Historique de réparation",
+				        VaadinIcons.BOOKMARK)
+				    .setClosable(false);
+				this.getView().getTabSheetContent().setSelectedTab(0);
+
+			}
+
+			if (arg.equals("Ajouter réparation")) {
+				System.out.println("ajouter reéparation");
+			}
+			if (arg.equals("Effacer téléphone")) {
+				System.out.println("effacer phone");
+			}
+
 		}
-	}
-//		if(o instanceof ReparationsPresenter) {
-//			if(arg instanceof ReparationsPresenter) {
-//				Fiche fiche  = (Fiche) arg;
-//				// lancer le prenseter raparation details
-//			}
-//		}
+		// if(o instanceof ReparationsPresenter) {
+		// if(arg instanceof ReparationsPresenter) {
+		// Fiche fiche = (Fiche) arg;
+		// // lancer le prenseter raparation details
+		// }
+		// }
 
 	}
 

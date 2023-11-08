@@ -18,7 +18,19 @@ public class ReparationsPresenter extends Observable {
 		model.setFiche(historeparations);
 
 		setComponents(historeparations);
+		setlisteners();
+
+	}
+
+	private void setlisteners() {
 		onClickItemGrid();
+		view.getBtnAjouter().addClickListener(e -> onBtnAjouterClicked());
+	}
+
+	private void onBtnAjouterClicked() {
+		setChanged();
+		notifyObservers("ajouter fiche");
+		
 	}
 
 	private void onClickItemGrid() {

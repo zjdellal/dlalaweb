@@ -15,22 +15,22 @@ import com.vaadin.ui.themes.ValoTheme;
 @SuppressWarnings("serial")
 public class DetailsPhoneView extends VerticalLayout {
 
-	private TextField					txtMarquePhone, txtModelPhone, txtBatteriePhone, txtPrixAchatPhone, txtPrixVentePhone;
+	private TextField							txtMarquePhone, txtModelPhone, txtBatteriePhone, txtPrixAchatPhone, txtPrixVentePhone;
 	// accessoires téléphones
-	private TextField					txtAccesPhone, txtImei, txtNoModel, txtBenefice;
+	private TextField							txtAccesPhone, txtImei, txtNoModel, txtBenefice;
 	// couts réparation vente;
-	private TextField					txtCoutRepPhone;
+	private TextField							txtCoutRepPhone;
 
-	private ComboBox<String>	comboEtatPhone, comboCotePhone;
-	private DateField					dateAchatPhone, dateVentePhone, dateMajPhone;
-	private Button						btnSave;
+	private ComboBox<String>			comboEtatPhone, comboCotePhone;
+	private DateField							dateAchatPhone, dateVentePhone, dateMajPhone;
+	private Button								btnSave, btnAjouterReparation, btnDeletPhone;
 
-	private Window						winContent;
-	private Label							lblMonnaieCoutRep;
-	private Label							lblMonnaiePrixAchat;
-	private Label							lblMonnaiePrixVente;
-	private Label							lblMonnaieBenefice;
-	private ComboBox<StatutEnum> comboBoxStatutPhone;
+	private Window								winContent;
+	private Label									lblMonnaieCoutRep;
+	private Label									lblMonnaiePrixAchat;
+	private Label									lblMonnaiePrixVente;
+	private Label									lblMonnaieBenefice;
+	private ComboBox<StatutEnum>	comboBoxStatutPhone;
 
 	public DetailsPhoneView() {
 		this.setSizeFull();
@@ -124,7 +124,7 @@ public class DetailsPhoneView extends VerticalLayout {
 		lblMonnaieBenefice.setStyleName(ValoTheme.LABEL_BOLD);
 		lblMonnaieBenefice.setStyleName(ValoTheme.LABEL_H3);
 		HorizontalLayout hlBenefice = new HorizontalLayout(txtBenefice, lblMonnaieBenefice);
-		hl4.addComponents(hlPrixVente,hlPrixAchat, hlCout, hlBenefice);
+		hl4.addComponents(hlPrixVente, hlPrixAchat, hlCout, hlBenefice);
 		this.addComponent(hl4);
 
 	}
@@ -132,7 +132,10 @@ public class DetailsPhoneView extends VerticalLayout {
 
 	private void buildButtonSide() {
 		btnSave = new Button("Enregistrer");
-		HorizontalLayout hButtons = new HorizontalLayout(btnSave);
+		btnAjouterReparation = new Button("Ajouter réparation");
+		btnDeletPhone = new Button("Effacer téléphone");
+
+		HorizontalLayout hButtons = new HorizontalLayout(btnSave, btnAjouterReparation, btnDeletPhone);
 		this.addComponent(hButtons);
 		this.setComponentAlignment(hButtons, Alignment.BOTTOM_CENTER);
 	}
@@ -225,5 +228,13 @@ public class DetailsPhoneView extends VerticalLayout {
 		return comboBoxStatutPhone;
 	}
 
+	public Button getBtnAjouterReparation() {
+		return btnAjouterReparation;
+	}
+
+	public Button getBtnDeletPhone() {
+		return btnDeletPhone;
+	}
 	
+
 }

@@ -37,7 +37,7 @@ public class ReparationsView {
 
 	private void buildBtnSide() {
 		HorizontalLayout hButtons = new HorizontalLayout();
-		this.btnAjouter = new Button("Ajouter Téléphone");
+		this.btnAjouter = new Button("Ajouter Fiche");
 		hButtons.addComponent(btnAjouter);
 		vContent.addComponent(hButtons);
 		vContent.setComponentAlignment(hButtons, Alignment.BOTTOM_CENTER);

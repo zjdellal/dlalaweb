@@ -12,24 +12,27 @@ import com.vaadin.ui.UI;
 public class ReparationsController extends Observable implements Observer {
 	private ReparationsPresenter				reparationsPresenter;
 	private DetailsReparationPresenter	detailsRepPresenter;
-	private Phone phoneSelected;
+	private Phone												phoneSelected;
 
 	public ReparationsController(List<Fiche> historeparations, Phone phone) {
 		phoneSelected = phone;
 		reparationsPresenter = new ReparationsPresenter(historeparations);
 		reparationsPresenter.addObserver(this);
-		
-	
+
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(o instanceof ReparationsPresenter) {
-			if(arg instanceof Fiche) {
-				Fiche  fiche =  (Fiche) arg;
+		if (o instanceof ReparationsPresenter) {
+			if (arg instanceof Fiche) {
+				Fiche fiche = (Fiche) arg;
 				// setter le model
-				detailsRepPresenter = new DetailsReparationPresenter(fiche, phoneSelected );
+				detailsRepPresenter = new DetailsReparationPresenter(fiche, phoneSelected);
 				detailsRepPresenter.addObserver(this);
+				UI.getCurrent().addWindow(detailsRepPresenter.getView().getWinContent());
+			}
+			if (arg.equals("ajouter fiche")) {
+				detailsRepPresenter = new DetailsReparationPresenter(phoneSelected);
 				UI.getCurrent().addWindow(detailsRepPresenter.getView().getWinContent());
 			}
 		}
@@ -43,8 +46,5 @@ public class ReparationsController extends Observable implements Observer {
 	public DetailsReparationPresenter getDetailsRepPresenter() {
 		return detailsRepPresenter;
 	}
-	
-	
-	
 
 }
