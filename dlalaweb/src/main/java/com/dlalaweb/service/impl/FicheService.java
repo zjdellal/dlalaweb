@@ -10,6 +10,7 @@ import com.dlalaweb.service.client.RestClient;
 
 public class FicheService {
 	private String						fiches	= "fichesbyid/";
+	private String						addFiche	= "addFiche/";
 	private RestClient<Fiche>	client;
 
 	public FicheService() {
@@ -25,5 +26,12 @@ public class FicheService {
 		}
 		return ficheListe;
 
+	}
+	
+	public Fiche save(Fiche fiche) {
+		
+		Fiche ficheSer = client.post(addFiche, fiche, new ParameterizedTypeReference<Fiche>() {
+		});
+		return ficheSer;
 	}
 }

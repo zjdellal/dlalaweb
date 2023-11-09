@@ -10,6 +10,7 @@ public class DetailsReparationModel {
 	private Phone selectedPhone ; 
 	
 	public DetailsReparationModel() {
+		selectedFiche =  new Fiche();
 		
 	}
 	

@@ -43,6 +43,7 @@ public class DetailsReparationView {
 
 	}
 
+
 	private void buildScreen() {
 		buildFlayoutTel();
 		this.txtTitre = new TextField("Titre");
@@ -132,5 +133,10 @@ public class DetailsReparationView {
 	public Label getLblMarque() {
 		return lblMarque;
 	}
+	
+	public Button getBtnEnregistrer() {
+		return btnEnregistrer;
+	}
+
 
 }
