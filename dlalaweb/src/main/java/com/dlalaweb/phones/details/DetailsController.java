@@ -6,7 +6,10 @@ import java.util.Observer;
 import com.dlalacore.dlala.entities.Phone;
 import com.dlalaweb.phones.details.onglet.Phone.DetailsPhonePresenter;
 import com.dlalaweb.phones.details.onglet.reparations.ReparationsController;
+import com.dlalaweb.phones.details.onglet.reparations.details.DetailsReparationPresenter;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.ui.TabSheet.Tab;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 
 public class DetailsController extends Observable implements Observer {
@@ -15,6 +18,7 @@ public class DetailsController extends Observable implements Observer {
 	// private ReparationsPresenter historique;
 	private ReparationsController	reparationsController;
 	private Phone									phoneSelected;
+	private DetailsReparationPresenter ajouterReparationPresenter;
 
 	public DetailsController() {
 		this.view = new DetailsView();
@@ -68,11 +72,29 @@ public class DetailsController extends Observable implements Observer {
 
 			if (arg.equals("Ajouter réparation")) {
 				System.out.println("ajouter reéparation");
+				this.ajouterReparationPresenter = new DetailsReparationPresenter(phoneSelected);
+				UI.getCurrent().addWindow(ajouterReparationPresenter.getView().getWinContent());
+//peut etre ajouter observer ici
 			}
 			if (arg.equals("Effacer téléphone")) {
 				System.out.println("effacer phone");
 			}
 
+		}
+		if(o instanceof ReparationsController) {
+			if(arg.equals("refresh")) {
+				Tab tab = this.getView().getTabSheetContent().getTab(reparationsController.getReparationsPresenter().getView().getContent());
+				this.getView().getTabSheetContent().removeTab(tab);
+				this.reparationsController = new ReparationsController( this.phoneSelected);
+
+				reparationsController.addObserver(this);
+				this.getView().getTabSheetContent()
+				    .addTab(reparationsController.getReparationsPresenter().getView().getContent(), "Historique de réparation",
+				        VaadinIcons.BOOKMARK)
+				    .setClosable(false);
+				this.getView().getTabSheetContent().setSelectedTab(1);
+
+			}
 		}
 		// if(o instanceof ReparationsPresenter) {
 		// if(arg instanceof ReparationsPresenter) {

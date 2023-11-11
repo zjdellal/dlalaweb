@@ -28,16 +28,20 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 		model.setListener(this);
 		model.setSelectedFiche(fiche);
 		model.setSelectedPhone(phone);
+		binder.readBean(model.getSelectedFiche());
+		setListeners();
+
+
 
 	}
 
 	public DetailsReparationPresenter(Phone phone) {
 		view = new DetailsReparationView();
 		model = new DetailsReparationModel();
-	
+
 		service = new FicheService();
 		bindComponents();
-	
+
 		model.setListener(this);
 		model.setSelectedPhone(phone);
 		binder.setBean(model.getSelectedFiche());
@@ -51,28 +55,33 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 	public void bindComponents() {
 
 		binder = new Binder<>();
-		binder.forField(view.getTxtCout())
-		    .withValidator(cout -> cout.length() >= 1 && cout.matches("[0-9]"), "Saisie incorrecte")
+		binder.forField(view.getTxtCout()).withValidator(cout -> cout.matches("^[0-9]+"), "Saisie incorrecte")
 		    .bind(Fiche::getCout, Fiche::setCout);
 		binder.forField(view.getTxtDetail()).bind(Fiche::getDetails, Fiche::setDetails);
 		binder.forField(view.getTxtDate()).bind(Fiche::getDate, Fiche::setDate);
-		
 
 	}
 
 	private void setListeners() {
 		view.getBtnEnregistrer().addClickListener(e -> onBtnSaveClicked());
+		this.view.getWinContent().addCloseListener(e -> onWindoewClosed());
 
 	}
 
 	private void onBtnSaveClicked() {
+		boolean isNew = false;
 		try {
 			binder.writeBean(model.getSelectedFiche());
-			if (model.getSelectedFiche().getId() == null)
+			if (model.getSelectedFiche().getId() == null) {
 				model.getSelectedFiche().setId(0);
+				isNew = true;
+			}
 
 			service.save(model.getSelectedFiche());
-			Notification.show("Fiche Ajoutée", "Alert !", Type.ASSISTIVE_NOTIFICATION);
+			if (isNew)
+				Notification.show("Fiche Ajoutée", ";) ", Type.WARNING_MESSAGE);
+			else
+				Notification.show("Modifié !", ":) ", Type.HUMANIZED_MESSAGE);
 
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
@@ -87,12 +96,11 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 	public void onFicheSelected() {
 		Fiche selectedFiche = model.getSelectedFiche();
 
-
 		view.getWinContent().setCaption("<h2><b>" + selectedFiche.getTitre() + "</b></h2>");
 		view.getTxtDate().setValue(selectedFiche.getDate());
 		view.getTxtCout().setValue(selectedFiche.getCout());
 		view.getTxtDetail().setValue(selectedFiche.getDetails());
-	
+
 	}
 
 	public DetailsReparationView getView() {
@@ -110,8 +118,12 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 		if (p.getNoModelPhone() != null)
 			view.getLblNoModel().setValue(p.getNoModelPhone());
 		model.getSelectedFiche().setTitre(view.getTxtTitre().getValue());
-//		model.getSelectedFiche().setPhone(model.getSelectedPhone());
+		// model.getSelectedFiche().setPhone(model.getSelectedPhone());
 
+	}
+	public void onWindoewClosed() {
+		setChanged();
+		notifyObservers("close window");
 	}
 
 }

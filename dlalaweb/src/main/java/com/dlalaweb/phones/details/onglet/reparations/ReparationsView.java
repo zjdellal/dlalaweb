@@ -6,6 +6,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.VerticalLayout;
 
 public class ReparationsView {
@@ -13,6 +14,7 @@ public class ReparationsView {
 	private Label						lblCaption;
 	private Grid<Fiche>			gFiche;
 	private Button					btnAjouter;
+	private Tab tabContent;
 
 	public ReparationsView() {
 		vContent = new VerticalLayout();

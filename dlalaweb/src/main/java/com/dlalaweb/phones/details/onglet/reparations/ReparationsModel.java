@@ -5,10 +5,19 @@ import java.util.List;
 import com.dlalacore.dlala.entities.Fiche;
 
 public class ReparationsModel {
+	private List<Fiche> fiches;
 
-	public void setFiche(List<Fiche> historeparations) {
-		// TODO Auto-generated method stub
-		
+
+
+	public List<Fiche> getFiches() {
+		return fiches;
 	}
+
+	public void setFiches(List<Fiche> fiches) {
+		this.fiches = fiches;
+	}
+	
+	
+	
 
 }

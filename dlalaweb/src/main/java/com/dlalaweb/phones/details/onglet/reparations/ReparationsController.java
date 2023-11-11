@@ -13,10 +13,20 @@ public class ReparationsController extends Observable implements Observer {
 	private ReparationsPresenter				reparationsPresenter;
 	private DetailsReparationPresenter	detailsRepPresenter;
 	private Phone												phoneSelected;
+	private List<Fiche> histoReparations;
 
 	public ReparationsController(List<Fiche> historeparations, Phone phone) {
 		phoneSelected = phone;
+		this.histoReparations = historeparations;
 		reparationsPresenter = new ReparationsPresenter(historeparations);
+		reparationsPresenter.addObserver(this);
+
+	}
+	
+	public ReparationsController( Phone phone) {
+		phoneSelected = phone;
+	
+		reparationsPresenter = new ReparationsPresenter(phoneSelected);
 		reparationsPresenter.addObserver(this);
 
 	}
@@ -36,6 +46,16 @@ public class ReparationsController extends Observable implements Observer {
 				UI.getCurrent().addWindow(detailsRepPresenter.getView().getWinContent());
 			}
 		}
+		if(o instanceof DetailsReparationPresenter) {
+			if(arg.equals("close window")) {
+				
+//				reparationsPresenter = new ReparationsPresenter(phoneSelected);
+//				reparationsPresenter.addObserver(this);
+				setChanged();
+				notifyObservers("refresh");
+			}
+		}
+		
 
 	}
 
