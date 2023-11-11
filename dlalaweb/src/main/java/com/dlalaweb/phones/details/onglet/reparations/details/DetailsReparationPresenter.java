@@ -9,6 +9,7 @@ import com.dlalacore.dlala.entities.Phone;
 import com.dlalaweb.phones.details.onglet.reparations.details.DetailsReparationModel.ListenerModelDetReparaton;
 import com.dlalaweb.service.impl.FicheService;
 import com.vaadin.data.Binder;
+import com.vaadin.data.StatusChangeEvent;
 import com.vaadin.data.ValidationException;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -18,20 +19,26 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 	private DetailsReparationModel	model;
 	private FicheService						service;
 	private Binder<Fiche>						binder;
+	private boolean									isvalid	= false, hasChange = false;
 
 	public DetailsReparationPresenter(Fiche fiche, Phone phone) {
 		view = new DetailsReparationView();
 		model = new DetailsReparationModel();
 		service = new FicheService();
 		bindComponents();
+		setListeners();
 		binder.setBean(model.getSelectedFiche());
 		model.setListener(this);
 		model.setSelectedFiche(fiche);
 		model.setSelectedPhone(phone);
-		binder.readBean(model.getSelectedFiche());
-		setListeners();
 
+		// binder.setBean(model.getSelectedFiche());
 
+		// binder.readBean(model.getSelectedFiche());
+
+		view.getTxtTitre().setReadOnly(true);
+		view.getTxtDate().setReadOnly(true);
+		view.getBtnEnregistrer().setEnabled(false);
 
 	}
 
@@ -45,11 +52,14 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 		model.setListener(this);
 		model.setSelectedPhone(phone);
 		binder.setBean(model.getSelectedFiche());
+		model.setListener(this);
 		view.getTxtDate().setValue(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
 
-		setListeners();
 		model.getSelectedFiche().setPhone(phone);
 		binder.readBean(model.getSelectedFiche());
+		setListeners();
+		view.getBtnEnregistrer().setEnabled(isvalid && hasChange);
+		view.getBtnEffacer().setEnabled(false);
 	}
 
 	public void bindComponents() {
@@ -59,17 +69,27 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 		    .bind(Fiche::getCout, Fiche::setCout);
 		binder.forField(view.getTxtDetail()).bind(Fiche::getDetails, Fiche::setDetails);
 		binder.forField(view.getTxtDate()).bind(Fiche::getDate, Fiche::setDate);
-
+		binder.forField(view.getTxtTitre()).withValidator(titre -> titre.matches("[a-zA-Z ]+"), "Saisie incorrect ")
+		    .asRequired("Champ Obligatoire").bind(Fiche::getTitre, Fiche::setTitre);
 	}
 
 	private void setListeners() {
 		view.getBtnEnregistrer().addClickListener(e -> onBtnSaveClicked());
 		this.view.getWinContent().addCloseListener(e -> onWindoewClosed());
+		// binder.addStatusChangeListener(e -> onStatusBinderChanged());
+		binder.addValueChangeListener(e -> onStatusBinderChanged());
 
 	}
 
+	private void onStatusBinderChanged() {
+		hasChange = true;
+		isvalid = binder.isValid();
+		 view.getBtnEnregistrer().setEnabled(isvalid && hasChange);
+	
+	}
+
 	private void onBtnSaveClicked() {
-		boolean isNew = false;
+		boolean isNew = false ;
 		try {
 			binder.writeBean(model.getSelectedFiche());
 			if (model.getSelectedFiche().getId() == null) {
@@ -82,7 +102,11 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 				Notification.show("Fiche Ajoutée", ";) ", Type.WARNING_MESSAGE);
 			else
 				Notification.show("Modifié !", ":) ", Type.HUMANIZED_MESSAGE);
-
+			
+			if(!view.getBtnEffacer().isEnabled()) {
+				view.getBtnEffacer().setEnabled(true);
+			}
+			
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,10 +120,11 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 	public void onFicheSelected() {
 		Fiche selectedFiche = model.getSelectedFiche();
 
-		view.getWinContent().setCaption("<h2><b>" + selectedFiche.getTitre() + "</b></h2>");
+		view.getTxtTitre().setValue(selectedFiche.getTitre());
 		view.getTxtDate().setValue(selectedFiche.getDate());
 		view.getTxtCout().setValue(selectedFiche.getCout());
 		view.getTxtDetail().setValue(selectedFiche.getDetails());
+		binder.readBean(model.getSelectedFiche());
 
 	}
 
@@ -121,6 +146,7 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 		// model.getSelectedFiche().setPhone(model.getSelectedPhone());
 
 	}
+
 	public void onWindoewClosed() {
 		setChanged();
 		notifyObservers("close window");

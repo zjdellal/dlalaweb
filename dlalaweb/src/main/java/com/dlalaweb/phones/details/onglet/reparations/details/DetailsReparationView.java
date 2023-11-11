@@ -22,7 +22,7 @@ public class DetailsReparationView {
 	private Label						lblNomTel, lblModel, lblNoModel, lblMarque;
 	private FormLayout			fLayout;
 	private Label						lblMonnaieCout;
-	private Button btnEnregistrer;
+	private Button btnEnregistrer, btnEffacer;
 
 	public DetailsReparationView() {
 		vContent = new VerticalLayout();
@@ -48,6 +48,7 @@ public class DetailsReparationView {
 		buildFlayoutTel();
 		this.txtTitre = new TextField("Titre");
 		txtTitre.setSizeFull();
+		this.vContent.addComponent(txtTitre);
 		this.txtDate = new TextField("Date de réparation");
 		this.txtCout = new TextField("Cout");
 		txtCout.setWidth("95%");
@@ -62,15 +63,17 @@ public class DetailsReparationView {
 		hCout.setComponentAlignment(lblMonnaieCout, Alignment.BOTTOM_CENTER);
 		HorizontalLayout h = new HorizontalLayout(txtDate, hCout);
 		h.setWidth("100%");
-		this.txtDetail = new TextArea("Détail:");
+		this.txtDetail = new TextArea("Détails:");
 
 		txtDetail.setWidth("100%");
 
 		vContent.addComponents(h, txtDetail);
 		vContent.setComponentAlignment(txtDetail, Alignment.BOTTOM_LEFT);
 		this.btnEnregistrer =  new Button("Enregistrer");
-		this.vContent.addComponent(btnEnregistrer);
-		this.vContent.setComponentAlignment(btnEnregistrer, Alignment.MIDDLE_CENTER);
+		this.btnEffacer =  new Button("Supprimer");
+		HorizontalLayout hButtons =  new HorizontalLayout(btnEnregistrer, btnEffacer);
+		this.vContent.addComponent(hButtons);
+		this.vContent.setComponentAlignment(hButtons, Alignment.MIDDLE_CENTER);
 
 	}
 
@@ -138,5 +141,11 @@ public class DetailsReparationView {
 		return btnEnregistrer;
 	}
 
+
+	public Button getBtnEffacer() {
+		return btnEffacer;
+	}
+
+	
 
 }

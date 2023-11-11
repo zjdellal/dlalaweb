@@ -73,6 +73,7 @@ public class DetailsController extends Observable implements Observer {
 			if (arg.equals("Ajouter réparation")) {
 				System.out.println("ajouter reéparation");
 				this.ajouterReparationPresenter = new DetailsReparationPresenter(phoneSelected);
+				this.ajouterReparationPresenter.addObserver(this);
 				UI.getCurrent().addWindow(ajouterReparationPresenter.getView().getWinContent());
 //peut etre ajouter observer ici
 			}
@@ -83,26 +84,32 @@ public class DetailsController extends Observable implements Observer {
 		}
 		if(o instanceof ReparationsController) {
 			if(arg.equals("refresh")) {
-				Tab tab = this.getView().getTabSheetContent().getTab(reparationsController.getReparationsPresenter().getView().getContent());
-				this.getView().getTabSheetContent().removeTab(tab);
-				this.reparationsController = new ReparationsController( this.phoneSelected);
-
-				reparationsController.addObserver(this);
-				this.getView().getTabSheetContent()
-				    .addTab(reparationsController.getReparationsPresenter().getView().getContent(), "Historique de réparation",
-				        VaadinIcons.BOOKMARK)
-				    .setClosable(false);
+				this.reloadReparations();
 				this.getView().getTabSheetContent().setSelectedTab(1);
 
 			}
 		}
-		// if(o instanceof ReparationsPresenter) {
-		// if(arg instanceof ReparationsPresenter) {
-		// Fiche fiche = (Fiche) arg;
-		// // lancer le prenseter raparation details
-		// }
-		// }
+		if(o instanceof DetailsReparationPresenter) {
+			if(arg.equals("close window")) {
+				this.reloadReparations();
+				
+			}
+		}
+	
 
+	}
+	
+	private void reloadReparations() {
+		Tab tab = this.getView().getTabSheetContent().getTab(reparationsController.getReparationsPresenter().getView().getContent());
+		this.getView().getTabSheetContent().removeTab(tab);
+		this.reparationsController = new ReparationsController( this.phoneSelected);
+
+		reparationsController.addObserver(this);
+		this.getView().getTabSheetContent()
+		    .addTab(reparationsController.getReparationsPresenter().getView().getContent(), "Historique de réparation",
+		        VaadinIcons.BOOKMARK)
+		    .setClosable(false);
+		
 	}
 
 	public DetailsView getView() {
