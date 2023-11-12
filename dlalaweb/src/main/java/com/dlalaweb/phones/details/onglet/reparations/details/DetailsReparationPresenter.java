@@ -171,8 +171,10 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 	}
 
 	public void onWindoewClosed() {
+		if(hasChange) {
 		setChanged();
 		notifyObservers("close window");
+		}
 	}
 
 }

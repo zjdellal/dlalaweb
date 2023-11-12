@@ -14,7 +14,7 @@ public class ReparationsView {
 	private Label						lblCaption;
 	private Grid<Fiche>			gFiche;
 	private Button					btnAjouter;
-	private Tab tabContent;
+	
 
 	public ReparationsView() {
 		vContent = new VerticalLayout();
@@ -26,7 +26,7 @@ public class ReparationsView {
 	}
 
 	private void buildScreen() {
-		lblCaption = new Label();
+		lblCaption = new Label("Total: ");
 		gFiche = new Grid<Fiche>();
 		gFiche.setSizeFull();
 

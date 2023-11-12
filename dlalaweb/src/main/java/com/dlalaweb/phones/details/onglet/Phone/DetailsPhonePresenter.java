@@ -15,9 +15,13 @@ import com.dlalaweb.service.impl.PhonesService;
 import com.dlalaweb.utils.ConverterLocalDateToString;
 import com.dlalaweb.utils.ConverterStatutEnumToString;
 import com.dlalaweb.utils.StatutEnum;
+import com.dlalaweb.utils.dialogconfirmation.DialogConfirmation;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.UI;
 
 public class DetailsPhonePresenter extends Observable implements DetPhoneModelListener {
 
@@ -33,6 +37,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		this.view = new DetailsPhoneView();
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
+		service = new PhonesService();
 		setListenersComponents();
 		setComponents();
 		binder = new Binder<>(Phone.class);
@@ -51,6 +56,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
 		this.model.setSelectedPhone(phone);
+		service = new PhonesService();
 		setListenersComponents();
 		setComponents();
 
@@ -66,7 +72,28 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		view.getBtnSave().addClickListener(e -> onBtnSaveClicked());
 		view.getWinContent().addCloseListener(e -> onWindowsClosed());
 		view.getBtnAjouterReparation().addClickListener(e -> onbtnAdReparationClicked(e));
-		view.getBtnDeletPhone().addClickListener(e -> onbtnAdReparationClicked(e));
+		view.getBtnDeletPhone().addClickListener(e -> onBtnDeleteClicked());
+	}
+
+	private void onBtnDeleteClicked() {
+		DialogConfirmation dialog = new DialogConfirmation();
+		dialog.getBtnCancel().addClickListener(e -> {
+			dialog.getWinContent().close();
+			Notification.show("Annuler !", Type.HUMANIZED_MESSAGE);
+			dialog.getWinContent().close();
+		});
+		dialog.getBtnOk().addClickListener(e -> {
+			boolean isOK = service.deletePhone(model.getSelectedPhone().getId());
+			if (isOK) {
+				Notification.show("Supprimer !", Type.HUMANIZED_MESSAGE);
+				dialog.getWinContent().close();
+				setChanged();
+				notifyObservers("téléphone supprimé");
+			}
+		});
+
+		UI.getCurrent().addWindow(dialog.getWinContent());
+
 	}
 
 	private void onbtnAdReparationClicked(ClickEvent e) {
@@ -95,7 +122,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 			binder.writeBean(model.getSelectedPhone());
 			LocalDate now = LocalDate.now();
 			model.getSelectedPhone().setDateMaj(String.valueOf(now));
-			service = new PhonesService();
+
 			service.save(model.getSelectedPhone());
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block

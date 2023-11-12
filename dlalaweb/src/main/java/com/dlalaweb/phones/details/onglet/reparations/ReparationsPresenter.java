@@ -5,11 +5,13 @@ import java.util.Observable;
 
 import com.dlalacore.dlala.entities.Fiche;
 import com.dlalacore.dlala.entities.Phone;
+import com.dlalaweb.phones.details.onglet.reparations.ReparationsModel.IFiche;
 import com.dlalaweb.service.impl.FicheService;
 import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.themes.ValoTheme;
 
-public class ReparationsPresenter extends Observable {
+public class ReparationsPresenter extends Observable implements IFiche {
 	private ReparationsView		view;
 	private ReparationsModel	model;
 	private FicheService			service;
@@ -17,6 +19,7 @@ public class ReparationsPresenter extends Observable {
 	public ReparationsPresenter(List<Fiche> historeparations) {
 		view = new ReparationsView();
 		model = new ReparationsModel();
+		model.setListenerFiche(this);
 		model.setFiches(historeparations);
 
 		setComponents(historeparations);
@@ -28,7 +31,8 @@ public class ReparationsPresenter extends Observable {
 		view = new ReparationsView();
 		model = new ReparationsModel();
 		service = new FicheService();
-		;
+		model.setListenerFiche(this);
+
 		model.setFiches(service.getFichesByIdPhone(phone.getId()));
 
 		setComponents(model.getFiches());
@@ -82,6 +86,14 @@ public class ReparationsPresenter extends Observable {
 
 	public ReparationsView getView() {
 		return view;
+	}
+
+	@Override
+	public void onFicheSelected() {
+		String txtTotale = view.getLblCaption().getValue();
+		view.getLblCaption().setValue(txtTotale + " " + model.getFiches().size());
+		view.getLblCaption().addStyleName(ValoTheme.LABEL_H3);
+		view.getLblCaption().addStyleName(ValoTheme.LABEL_BOLD);
 	}
 
 }

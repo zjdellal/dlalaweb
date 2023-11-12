@@ -13,6 +13,7 @@ public class ReparationsController extends Observable implements Observer {
 	private ReparationsPresenter				reparationsPresenter;
 	private DetailsReparationPresenter	detailsRepPresenter;
 	private Phone												phoneSelected;
+	@SuppressWarnings("unused")
 	private List<Fiche>									histoReparations;
 
 	public ReparationsController(List<Fiche> historeparations, Phone phone) {
@@ -43,6 +44,7 @@ public class ReparationsController extends Observable implements Observer {
 			}
 			if (arg.equals("ajouter fiche")) {
 				detailsRepPresenter = new DetailsReparationPresenter(phoneSelected);
+				detailsRepPresenter.addObserver(this);
 				
 				UI.getCurrent().addWindow(detailsRepPresenter.getView().getWinContent());
 			}
@@ -58,11 +60,14 @@ public class ReparationsController extends Observable implements Observer {
 			if (arg.equals("fiche supprimée")) {
 				detailsRepPresenter.getView().getWinContent().close();
 				reparationsPresenter = new ReparationsPresenter(phoneSelected);
+				reparationsPresenter.addObserver(this);
+			
 
 			}
-			if (arg.equals("fiche ajouté")) {
+			if (arg.equals("fiche ajoutée")) {
 				detailsRepPresenter.getView().getWinContent().close();
 				reparationsPresenter = new ReparationsPresenter(phoneSelected);
+				reparationsPresenter.addObserver(this);
 
 			}
 		}

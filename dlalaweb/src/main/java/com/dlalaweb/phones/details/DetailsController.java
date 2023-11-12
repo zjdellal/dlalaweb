@@ -77,8 +77,12 @@ public class DetailsController extends Observable implements Observer {
 				UI.getCurrent().addWindow(ajouterReparationPresenter.getView().getWinContent());
 //peut etre ajouter observer ici
 			}
-			if (arg.equals("Effacer téléphone")) {
-				System.out.println("effacer phone");
+			if (arg.equals("téléphone supprimé")) {
+				this.view.getWinContent().close();
+				this.detailsPhone = null;
+				this.reparationsController = null;
+				setChanged();
+				notifyObservers("téléphone supprimé");
 			}
 
 		}
@@ -86,12 +90,14 @@ public class DetailsController extends Observable implements Observer {
 			if(arg.equals("refresh")) {
 				this.reloadReparations();
 				this.getView().getTabSheetContent().setSelectedTab(1);
-
+				 new DetailsController(phoneSelected);
+				 System.out.println("recharge");
 			}
 		}
 		if(o instanceof DetailsReparationPresenter) {
 			if(arg.equals("close window")) {
 				this.reloadReparations();
+				//new DetailsController();
 				
 			}
 			if(arg.equals("fiche supprimée")) {

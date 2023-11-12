@@ -71,6 +71,12 @@ public class MyUIControlleur implements Observer, Serializable {
 				phones.addObserver(this);
 				UI.getCurrent().setContent(phones.getView());
 			}
+			if(arg.equals("téléphone supprimé")) {
+				phones = new PhonesPresenter();
+				phones.addObserver(this);
+				UI.getCurrent().setContent(phones.getView());
+				System.err.println("notif de details control");
+			}
 		}
 
 	}

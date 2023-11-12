@@ -104,17 +104,24 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.txtPrixAchatPhone = new TextField("Prix d'achat");
 		lblMonnaiePrixAchat = new Label("$ Cad");
 		lblMonnaiePrixAchat.setStyleName(ValoTheme.LABEL_BOLD);
-		lblMonnaiePrixAchat.setStyleName(ValoTheme.LABEL_H3);
+		lblMonnaiePrixAchat.setStyleName(ValoTheme.LABEL_H4);
 		HorizontalLayout hlPrixAchat = new HorizontalLayout(txtPrixAchatPhone, lblMonnaiePrixAchat);
+		hlPrixAchat.setMargin(false);
+		hlPrixAchat.setSpacing(true);
+		hlPrixAchat.setComponentAlignment(lblMonnaiePrixAchat, Alignment.BOTTOM_CENTER);
+
 		this.txtPrixVentePhone = new TextField("Prix de vente");
 		lblMonnaiePrixVente = new Label("$ Cad");
 		lblMonnaiePrixVente.setStyleName(ValoTheme.LABEL_BOLD);
-		lblMonnaiePrixVente.setStyleName(ValoTheme.LABEL_H3);
+		lblMonnaiePrixVente.setStyleName(ValoTheme.LABEL_H4);
 		HorizontalLayout hlPrixVente = new HorizontalLayout(txtPrixVentePhone, lblMonnaiePrixVente);
+		hlPrixVente.setMargin(false);
+		hlPrixVente.setSpacing(true);
+		hlPrixVente.setComponentAlignment(lblMonnaiePrixVente, Alignment.BOTTOM_CENTER);
 		this.txtCoutRepPhone = new TextField("Coûts de réparation");
 		lblMonnaieCoutRep = new Label("$ Cad");
 		lblMonnaieCoutRep.setStyleName(ValoTheme.LABEL_BOLD);
-		lblMonnaieCoutRep.setStyleName(ValoTheme.LABEL_H3);
+		lblMonnaieCoutRep.setStyleName(ValoTheme.LABEL_H4);
 		HorizontalLayout hlCout = new HorizontalLayout(txtCoutRepPhone, lblMonnaieCoutRep);
 		hlCout.setMargin(false);
 		hlCout.setSpacing(true);
@@ -122,8 +129,11 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.txtBenefice = new TextField("Bénéfice");
 		lblMonnaieBenefice = new Label("$ Cad");
 		lblMonnaieBenefice.setStyleName(ValoTheme.LABEL_BOLD);
-		lblMonnaieBenefice.setStyleName(ValoTheme.LABEL_H3);
+		lblMonnaieBenefice.setStyleName(ValoTheme.LABEL_H4);
 		HorizontalLayout hlBenefice = new HorizontalLayout(txtBenefice, lblMonnaieBenefice);
+		hlBenefice.setMargin(false);
+		hlBenefice.setSpacing(true);
+		hlBenefice.setComponentAlignment(lblMonnaieBenefice, Alignment.BOTTOM_CENTER);
 		hl4.addComponents(hlPrixVente, hlPrixAchat, hlCout, hlBenefice);
 		this.addComponent(hl4);
 
