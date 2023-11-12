@@ -13,7 +13,7 @@ public class ReparationsController extends Observable implements Observer {
 	private ReparationsPresenter				reparationsPresenter;
 	private DetailsReparationPresenter	detailsRepPresenter;
 	private Phone												phoneSelected;
-	private List<Fiche> histoReparations;
+	private List<Fiche>									histoReparations;
 
 	public ReparationsController(List<Fiche> historeparations, Phone phone) {
 		phoneSelected = phone;
@@ -22,10 +22,10 @@ public class ReparationsController extends Observable implements Observer {
 		reparationsPresenter.addObserver(this);
 
 	}
-	
-	public ReparationsController( Phone phone) {
+
+	public ReparationsController(Phone phone) {
 		phoneSelected = phone;
-	
+
 		reparationsPresenter = new ReparationsPresenter(phoneSelected);
 		reparationsPresenter.addObserver(this);
 
@@ -43,19 +43,29 @@ public class ReparationsController extends Observable implements Observer {
 			}
 			if (arg.equals("ajouter fiche")) {
 				detailsRepPresenter = new DetailsReparationPresenter(phoneSelected);
+				
 				UI.getCurrent().addWindow(detailsRepPresenter.getView().getWinContent());
 			}
 		}
-		if(o instanceof DetailsReparationPresenter) {
-			if(arg.equals("close window")) {
-				
-//				reparationsPresenter = new ReparationsPresenter(phoneSelected);
-//				reparationsPresenter.addObserver(this);
+		if (o instanceof DetailsReparationPresenter) {
+			if (arg.equals("close window")) {
+
+				// reparationsPresenter = new ReparationsPresenter(phoneSelected);
+				// reparationsPresenter.addObserver(this);
 				setChanged();
 				notifyObservers("refresh");
 			}
+			if (arg.equals("fiche supprimée")) {
+				detailsRepPresenter.getView().getWinContent().close();
+				reparationsPresenter = new ReparationsPresenter(phoneSelected);
+
+			}
+			if (arg.equals("fiche ajouté")) {
+				detailsRepPresenter.getView().getWinContent().close();
+				reparationsPresenter = new ReparationsPresenter(phoneSelected);
+
+			}
 		}
-		
 
 	}
 

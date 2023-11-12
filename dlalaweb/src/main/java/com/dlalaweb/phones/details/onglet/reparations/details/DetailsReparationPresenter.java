@@ -8,10 +8,11 @@ import com.dlalacore.dlala.entities.Fiche;
 import com.dlalacore.dlala.entities.Phone;
 import com.dlalaweb.phones.details.onglet.reparations.details.DetailsReparationModel.ListenerModelDetReparaton;
 import com.dlalaweb.service.impl.FicheService;
+import com.dlalaweb.utils.dialogconfirmation.DialogConfirmation;
 import com.vaadin.data.Binder;
-import com.vaadin.data.StatusChangeEvent;
 import com.vaadin.data.ValidationException;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Notification.Type;
 
 public class DetailsReparationPresenter extends Observable implements ListenerModelDetReparaton {
@@ -76,20 +77,40 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 	private void setListeners() {
 		view.getBtnEnregistrer().addClickListener(e -> onBtnSaveClicked());
 		this.view.getWinContent().addCloseListener(e -> onWindoewClosed());
+		this.view.getBtnEffacer().addClickListener(e -> onBtnEffacerClicked());
 		// binder.addStatusChangeListener(e -> onStatusBinderChanged());
 		binder.addValueChangeListener(e -> onStatusBinderChanged());
+
+	}
+
+	private void onBtnEffacerClicked() {
+		DialogConfirmation dialog = new DialogConfirmation();
+		dialog.getBtnCancel().addClickListener(e -> {
+			dialog.getWinContent().close();
+			Notification.show("Annuler !", Type.HUMANIZED_MESSAGE);
+			dialog.getWinContent().close();
+		});
+		dialog.getBtnOk().addClickListener(e -> {
+			service.deleteFiche(model.getSelectedFiche().getId());
+			Notification.show("Supprimer !", Type.HUMANIZED_MESSAGE);
+			dialog.getWinContent().close();
+			setChanged();
+			notifyObservers("fiche supprimée");
+		});
+
+		UI.getCurrent().addWindow(dialog.getWinContent());
 
 	}
 
 	private void onStatusBinderChanged() {
 		hasChange = true;
 		isvalid = binder.isValid();
-		 view.getBtnEnregistrer().setEnabled(isvalid && hasChange);
-	
+		view.getBtnEnregistrer().setEnabled(isvalid && hasChange);
+
 	}
 
 	private void onBtnSaveClicked() {
-		boolean isNew = false ;
+		boolean isNew = false;
 		try {
 			binder.writeBean(model.getSelectedFiche());
 			if (model.getSelectedFiche().getId() == null) {
@@ -102,11 +123,13 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 				Notification.show("Fiche Ajoutée", ";) ", Type.WARNING_MESSAGE);
 			else
 				Notification.show("Modifié !", ":) ", Type.HUMANIZED_MESSAGE);
-			
-			if(!view.getBtnEffacer().isEnabled()) {
+
+			if (!view.getBtnEffacer().isEnabled()) {
 				view.getBtnEffacer().setEnabled(true);
 			}
-			
+			setChanged();
+			notifyObservers("fiche ajoutée");
+
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

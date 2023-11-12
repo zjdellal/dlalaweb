@@ -94,6 +94,9 @@ public class DetailsController extends Observable implements Observer {
 				this.reloadReparations();
 				
 			}
+			if(arg.equals("fiche supprimée")) {
+			
+			}
 		}
 	
 
