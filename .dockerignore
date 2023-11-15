@@ -1,0 +1,4 @@
+.git
+/postgres-data/
+.gitignore
+Dockerfile

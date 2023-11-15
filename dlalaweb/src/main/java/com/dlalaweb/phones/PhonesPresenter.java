@@ -2,13 +2,11 @@ package com.dlalaweb.phones;
 
 import java.util.List;
 import java.util.Observable;
-
+import com.dlalaweb.service.impl.PhonesService;
 import com.dlalacore.dlala.entities.Phone;
 import com.dlalacore.dlala.entities.Utilisateur;
-import com.dlalaweb.service.impl.PhonesService;
 import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.UI;
 
 public class PhonesPresenter extends Observable implements PhoneListener {

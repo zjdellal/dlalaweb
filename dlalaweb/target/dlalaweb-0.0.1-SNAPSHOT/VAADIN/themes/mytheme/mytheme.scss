@@ -1,3 +1,4 @@
+
 // If you edit this file you need to compile the theme. See README.md for details.
 
 // Global variable overrides. Must be declared before importing Valo.
@@ -8,8 +9,8 @@
 //$v-font-family: "Open Sans", sans-serif;
 
 // Defines the border used by all components.
-$v-border: 1px solid (v-shade 0.7);
-$v-border-radius: 4px;
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
 
 // Affects the color of some component elements, e.g Button, Panel title, etc
 //$v-background-color: hsl(210, 0%, 98%);
@@ -35,4 +36,5 @@ $v-border-radius: 4px;
   @include valo;
 
   // Insert your own theme rules here
+  
 }
