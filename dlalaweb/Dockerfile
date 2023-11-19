@@ -1,13 +1,14 @@
-FROM openjdk:8-jdk-alpine
+FROM tomcat:8.5.31
+MAINTAINER zak-dev
 
+WORKDIR /usr/local/tomcat
 
-VOLUME /tmp
+ENV TZ=US/Eastern
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ADD target/dlalaweb-0.0.1-SNAPSHOT.war app.war
+COPY target/dlalaweb-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/dlalaweb.war
+RUN sed -i 's/port="8080"/port="8089"/' ${CATALINA_HOME}/conf/server.xml
 
-RUN sh -c 'touch /app.war'
-
-CMD java -Dspring.couchbase.bootstrap-hosts=$HOSTS -Djava.security.egd=file:/dev/./urandom -jar /app.war
-
+CMD ["catalina.sh", "run"]
 
 
