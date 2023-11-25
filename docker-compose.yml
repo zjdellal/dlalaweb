@@ -5,7 +5,8 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgers
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
       POSTGRES_DB: root
       TZ: US/Eastern
       PGTZ: US/Eastern

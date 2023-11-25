@@ -51,12 +51,7 @@ public class DetailsController extends Observable implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof DetailsPhonePresenter) {
-			// if (arg.equals("close window")) {
-			// setChanged();
-			// notifyObservers("close window");
-			//
-			//
-			// }
+		
 			if (arg.equals("Historique éxistante")) {
 
 				this.reparationsController = new ReparationsController(detailsPhone.getHistoreparations(), this.phoneSelected);
@@ -71,8 +66,8 @@ public class DetailsController extends Observable implements Observer {
 			}
 
 			if (arg.equals("Ajouter réparation")) {
-				System.out.println("ajouter reéparation");
-				this.ajouterReparationPresenter = new DetailsReparationPresenter(phoneSelected);
+				
+				this.ajouterReparationPresenter = new DetailsReparationPresenter(detailsPhone.getModel().getSelectedPhone());
 				this.ajouterReparationPresenter.addObserver(this);
 				UI.getCurrent().addWindow(ajouterReparationPresenter.getView().getWinContent());
 //peut etre ajouter observer ici

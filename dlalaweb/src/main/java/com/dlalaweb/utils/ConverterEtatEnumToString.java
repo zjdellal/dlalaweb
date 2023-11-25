@@ -5,21 +5,21 @@ import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
 
 @SuppressWarnings( "serial")
-public class ConverterStatutEnumToString implements Converter<StatutEnum, String> {
+public class ConverterEtatEnumToString implements Converter<EtatEnum, String> {
 
 	@Override
-	public Result<String> convertToModel(StatutEnum value, ValueContext context) {
+	public Result<String> convertToModel(EtatEnum value, ValueContext context) {
 		if (value != null)
 			return Result.ok(String.valueOf(value));
 		else
-			return Result.ok(null);
+			return Result.ok("");
 		
 	}
 
 	@Override
-	public StatutEnum convertToPresentation(String value, ValueContext context) {
+	public EtatEnum convertToPresentation(String value, ValueContext context) {
 		if(value != null)
-		return StatutEnum.valueOf(value);
+		return EtatEnum.valueOf(value);
 		else
 			return null;
 		

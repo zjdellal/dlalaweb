@@ -10,13 +10,17 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.PasswordField;
+
+
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 @SuppressWarnings("serial")
 public class LoginView extends VerticalLayout {
-	private TextField	txtUserName, txtPassword;
+	private TextField	txtUserName;
+	private PasswordField txtPassword;
 	private Window		winContent;
 	private Button		btnConnexion, btnFemer;
 
@@ -33,7 +37,7 @@ public class LoginView extends VerticalLayout {
 	private void buildScreen() {
 		this.txtUserName = new TextField("nom d'utilisateur");
 		this.txtUserName.setSizeFull();
-		this.txtPassword = new TextField("Mot de passe");
+		this.txtPassword = new PasswordField("Mot de passe");
 		this.txtPassword.setSizeFull();
 		this.addComponents(this.txtUserName, this.txtPassword);
 
@@ -58,7 +62,7 @@ public class LoginView extends VerticalLayout {
 		return txtUserName;
 	}
 
-	public TextField getTxtPassword() {
+	public PasswordField getTxtPassword() {
 		return txtPassword;
 	}
 

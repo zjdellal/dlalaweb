@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgers
-      POSTGRES_DB: root
+      POSTGRES_DB: mydlala
       TZ: US/Eastern
       PGTZ: US/Eastern
     volumes:

@@ -14,6 +14,8 @@ import com.dlalaweb.service.impl.FicheService;
 import com.dlalaweb.service.impl.PhonesService;
 import com.dlalaweb.utils.ConverterLocalDateToString;
 import com.dlalaweb.utils.ConverterStatutEnumToString;
+import com.dlalaweb.utils.ConverterEtatEnumToString;
+import com.dlalaweb.utils.EtatEnum;
 import com.dlalaweb.utils.StatutEnum;
 import com.dlalaweb.utils.dialogconfirmation.DialogConfirmation;
 import com.vaadin.data.Binder;
@@ -28,6 +30,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	private DetailsPhoneView	view;
 	private DetailsPhoneModel	model;
 	private PhonesService			service;
+	private FicheService			ficheService;
+
 	private Binder<Phone>			binder;
 	private List<Fiche>				historeparations;
 	private boolean						isNew	= false;
@@ -38,15 +42,19 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		this.model = new DetailsPhoneModel();
 		this.model.setListener(this);
 		service = new PhonesService();
-		setListenersComponents();
+
 		setComponents();
 		binder = new Binder<>(Phone.class);
 		binder();
 		binder.setBean(model.getSelectedPhone());
-
+		view.getBtnAjouterReparation().setEnabled(false);
+		view.getBtnDeletPhone().setEnabled(false);
+		setListenersComponents();
 	}
 
 	private void setComponents() {
+		Set<EtatEnum> setEtat = EnumSet.allOf(EtatEnum.class);
+		view.getComboEtatPhone().setItems(setEtat);
 		Set<StatutEnum> set = EnumSet.allOf(StatutEnum.class);
 		view.getComboBoxStatutPhone().setItems(set);
 	}
@@ -57,7 +65,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		this.model.setListener(this);
 		this.model.setSelectedPhone(phone);
 		service = new PhonesService();
-		setListenersComponents();
+
 		setComponents();
 
 		binder = new Binder<>(Phone.class);
@@ -65,6 +73,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		binder.readBean(model.getSelectedPhone());
 		binder();
 		model.setFiche(historeparations);
+		setListenersComponents();
 
 	}
 
@@ -73,6 +82,20 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		view.getWinContent().addCloseListener(e -> onWindowsClosed());
 		view.getBtnAjouterReparation().addClickListener(e -> onbtnAdReparationClicked(e));
 		view.getBtnDeletPhone().addClickListener(e -> onBtnDeleteClicked());
+		// value change listener pour marque
+		view.getTxtMarquePhone().addValueChangeListener(e -> onMarqueValueChange());
+	}
+
+	private void onMarqueValueChange() {
+
+		if (view.getTxtMarquePhone().getValue().equalsIgnoreCase("apple")) {
+			binder.forField(view.getTxtBatteriePhone()).asRequired("% Batterie obligatoire pour iphone")
+			    .bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
+
+		} else {
+			binder.forField(view.getTxtBatteriePhone()).bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
+			view.getTxtBatteriePhone().setRequiredIndicatorVisible(false);
+		}
 	}
 
 	private void onBtnDeleteClicked() {
@@ -83,6 +106,20 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 			dialog.getWinContent().close();
 		});
 		dialog.getBtnOk().addClickListener(e -> {
+			if (model.getSelectedPhone().getId() == 0) {
+				List<Phone> liste = service.findAll();
+				for (Phone p : liste) {
+					if (p.getImeiPhone().equals(view.getTxtImei().getValue())) {
+						model.getSelectedPhone().setId(p.getId());
+					}
+				}
+			}
+			/**
+			 * continuer ici il faudrait supprimer toutes les fiches connecter au phone a
+			 * supprimer
+			 */
+			// ficheService = new FicheService();
+
 			boolean isOK = service.deletePhone(model.getSelectedPhone().getId());
 			if (isOK) {
 				Notification.show("Supprimer !", Type.HUMANIZED_MESSAGE);
@@ -108,8 +145,9 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	}
 
 	private void onBtnSaveClicked() {
+		Phone phone = new Phone();
 		if (isNew) {
-			Phone phone = new Phone();
+
 			phone.setId(0);
 
 			if (model.getSelectedPhone() != null) {
@@ -123,7 +161,13 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 			LocalDate now = LocalDate.now();
 			model.getSelectedPhone().setDateMaj(String.valueOf(now));
 
-			service.save(model.getSelectedPhone());
+			Phone result = service.save(model.getSelectedPhone());
+			if (result != null) {
+				view.getBtnAjouterReparation().setEnabled(true);
+				view.getBtnDeletPhone().setEnabled(true);
+				new DetailsPhonePresenter(result);
+			}
+
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,15 +179,28 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	@Override
 	public void onPhoneSelected() {
 		Phone phone = model.getSelectedPhone();
+		setPrixFields(phone);
+		if (phone.getDateMaj() == null)
+			view.getDateMajPhone().setValue(LocalDate.now());
+
+	}
+
+	private void setPrixFields(Phone phone) {
+
 		FicheService fiche = new FicheService();
 		// lr = liste de réparations
+
 		historeparations = fiche.getFichesByIdPhone(phone.getId());
 		if (!historeparations.isEmpty())
 			view.getTxtCoutRepPhone().setValue(getTotalCoutReparation(historeparations));
 		else
 			view.getTxtCoutRepPhone().setValue("0");
+		if (phone.getPrixAchat() == null) {
+			view.getTxtPrixAchatPhone().setValue("0");
+		}
 
 		if (phone.getPrixVente() != null && phone.getPrixAchat() != null) {
+
 			Double ben = (double) 0;
 			double subVente = Double.parseDouble(phone.getPrixVente());
 			double subAchat = Double.parseDouble(phone.getPrixAchat());
@@ -157,7 +214,6 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 
 			view.getTxtBenefice().setValue(String.valueOf(ben));
 		}
-
 	}
 
 	private String getTotalCoutReparation(List<Fiche> fiches) {
@@ -177,16 +233,12 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	private void binder() {
 
 		// marque
-		binder.forField(view.getTxtMarquePhone())
-		    .withValidator(marque -> marque.length() >= 2 && marque.matches("^[a-zA-Z]*$"), "Saisie incorrecte")
-		    .bind(Phone::getMarque, Phone::setMarque);
+		binder.forField(view.getTxtMarquePhone()).asRequired().bind(Phone::getMarque, Phone::setMarque);
 		// model
 		binder.forField(view.getTxtModelPhone()).withValidator(model -> model.length() >= 2, "Champs obligatoire")
 		    .bind(Phone::getModel, Phone::setModel);
 		// imei
-		binder.forField(view.getTxtImei())
-		    .withValidator(imei -> imei.length() > 0 && imei.matches("\\d+"), "Champs numéric obligatoire")
-		    .bind(Phone::getImeiPhone, Phone::setImeiPhone);
+		binder.forField(view.getTxtImei()).asRequired("Imei obligatoire").bind(Phone::getImeiPhone, Phone::setImeiPhone);
 
 		// no model
 		binder.forField(view.getTxtNoModel()).withValidator(noModel -> noModel.length() > 0, "Champs obligatoire")
@@ -196,7 +248,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		    Phone::setNoModelPhone);
 
 		// état teléphone
-		binder.forField(view.getComboEtatPhone()).bind(Phone::getEtat, Phone::setEtat);
+		binder.forField(view.getComboEtatPhone()).withConverter(new ConverterEtatEnumToString()).bind(Phone::getEtat,
+		    Phone::setEtat);
 
 		// accessoires
 		binder.forField(view.getTxtAccesPhone()).bind(Phone::getAccessoires, Phone::setAccessoires);
@@ -205,15 +258,17 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		binder.forField(view.getComboCotePhone()).bind(Phone::getCotePhone, Phone::setCotePhone);
 
 		// état batterie
-		if (view.getTxtMarquePhone().getValue().equalsIgnoreCase("apple"))
-			binder.forField(view.getTxtBatteriePhone()).asRequired("champs obligatoire pour l'iphone")
-			    .bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
-		else
-			binder.forField(view.getTxtBatteriePhone()).bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
+		// if (view.getTxtMarquePhone().getValue().equalsIgnoreCase("apple"))
+		// binder.forField(view.getTxtBatteriePhone()).asRequired("champs obligatoire
+		// pour l'iphone")
+		// .bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
+		// else
+		// binder.forField(view.getTxtBatteriePhone()).bind(Phone::getEtatBatterie,
+		// Phone::setEtatBatterie);
 
 		// date d'achat
-		binder.forField(view.getDateAchatPhone()).withConverter(new ConverterLocalDateToString()).bind(Phone::getDateAchat,
-		    Phone::setDateAchat);
+		binder.forField(view.getDateAchatPhone()).asRequired("Date obligatoire")
+		    .withConverter(new ConverterLocalDateToString()).bind(Phone::getDateAchat, Phone::setDateAchat);
 		// date de vente
 		binder.forField(view.getDateVentePhone()).withConverter(new ConverterLocalDateToString()).bind(Phone::getDateVente,
 		    Phone::setDateVente);
@@ -249,6 +304,10 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 
 	public List<Fiche> getHistoreparations() {
 		return model.getSelectedPhone().getFiches();
+	}
+
+	public DetailsPhoneModel getModel() {
+		return model;
 	}
 
 }

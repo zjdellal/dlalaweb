@@ -1,6 +1,7 @@
 package com.dlalaweb.phones.details.onglet.Phone;
 
 import com.dlalaweb.utils.StatutEnum;
+import com.dlalaweb.utils.EtatEnum;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -21,7 +22,8 @@ public class DetailsPhoneView extends VerticalLayout {
 	// couts réparation vente;
 	private TextField							txtCoutRepPhone;
 
-	private ComboBox<String>			comboEtatPhone, comboCotePhone;
+	private ComboBox<String>			 comboCotePhone;
+	private ComboBox<EtatEnum>			comboEtatPhone;
 	private DateField							dateAchatPhone, dateVentePhone, dateMajPhone;
 	private Button								btnSave, btnAjouterReparation, btnDeletPhone;
 
@@ -64,6 +66,7 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.txtMarquePhone = new TextField("Marque du téléphone");
 		this.txtModelPhone = new TextField("Modèle du téléphone");
 		this.comboEtatPhone = new ComboBox<>("État du téléphone");
+		this.comboEtatPhone.setEmptySelectionAllowed(true);
 		this.txtBatteriePhone = new TextField("État de la batterie");
 		hl1.addComponents(txtMarquePhone, txtModelPhone, comboEtatPhone, txtBatteriePhone);
 		this.addComponent(hl1);
@@ -178,7 +181,7 @@ public class DetailsPhoneView extends VerticalLayout {
 		return txtCoutRepPhone;
 	}
 
-	public ComboBox<String> getComboEtatPhone() {
+	public ComboBox<EtatEnum> getComboEtatPhone() {
 		return comboEtatPhone;
 	}
 
