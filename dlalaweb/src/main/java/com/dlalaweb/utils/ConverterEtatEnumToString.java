@@ -12,13 +12,13 @@ public class ConverterEtatEnumToString implements Converter<EtatEnum, String> {
 		if (value != null)
 			return Result.ok(String.valueOf(value));
 		else
-			return Result.ok("");
+			return Result.ok(null);
 		
 	}
 
 	@Override
 	public EtatEnum convertToPresentation(String value, ValueContext context) {
-		if(value != null)
+		if(value != null && !value.isEmpty())
 		return EtatEnum.valueOf(value);
 		else
 			return null;

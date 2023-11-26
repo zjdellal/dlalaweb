@@ -70,8 +70,7 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 		    .bind(Fiche::getCout, Fiche::setCout);
 		binder.forField(view.getTxtDetail()).bind(Fiche::getDetails, Fiche::setDetails);
 		binder.forField(view.getTxtDate()).bind(Fiche::getDate, Fiche::setDate);
-		binder.forField(view.getTxtTitre()).withValidator(titre -> titre.matches("[a-zA-Z ]+"), "Saisie incorrect ")
-		    .asRequired("Champ Obligatoire").bind(Fiche::getTitre, Fiche::setTitre);
+		binder.forField(view.getTxtTitre()).asRequired("Champ Obligatoire").bind(Fiche::getTitre, Fiche::setTitre);
 	}
 
 	private void setListeners() {
@@ -171,9 +170,9 @@ public class DetailsReparationPresenter extends Observable implements ListenerMo
 	}
 
 	public void onWindoewClosed() {
-		if(hasChange) {
-		setChanged();
-		notifyObservers("close window");
+		if (hasChange) {
+			setChanged();
+			notifyObservers("close window");
 		}
 	}
 

@@ -50,6 +50,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		view.getBtnAjouterReparation().setEnabled(false);
 		view.getBtnDeletPhone().setEnabled(false);
 		setListenersComponents();
+		binder.readBean(model.getSelectedPhone());
+
 	}
 
 	private void setComponents() {
@@ -182,7 +184,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		setPrixFields(phone);
 		if (phone.getDateMaj() == null)
 			view.getDateMajPhone().setValue(LocalDate.now());
-
+		// binder.readBean(phone);
 	}
 
 	private void setPrixFields(Phone phone) {
@@ -257,14 +259,8 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		// cote téléphone
 		binder.forField(view.getComboCotePhone()).bind(Phone::getCotePhone, Phone::setCotePhone);
 
-		// état batterie
-		// if (view.getTxtMarquePhone().getValue().equalsIgnoreCase("apple"))
-		// binder.forField(view.getTxtBatteriePhone()).asRequired("champs obligatoire
-		// pour l'iphone")
-		// .bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
-		// else
-		// binder.forField(view.getTxtBatteriePhone()).bind(Phone::getEtatBatterie,
-		// Phone::setEtatBatterie);
+		//etet batterie
+		binder.forField(view.getTxtBatteriePhone()).bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
 
 		// date d'achat
 		binder.forField(view.getDateAchatPhone()).asRequired("Date obligatoire")
