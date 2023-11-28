@@ -147,19 +147,24 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 	}
 
 	private void onBtnSaveClicked() {
-		Phone phone = new Phone();
-		if (isNew) {
-
-			phone.setId(0);
-
-			if (model.getSelectedPhone() != null) {
-				phone.setId(model.getSelectedPhone().getId());
-			} else
-				model.setSelectedPhone(phone);
-		}
+		// Phone phone = new Phone();
+		// if (isNew) {
+		//
+		// phone.setId(0);
+		//
+		// if (model.getSelectedPhone() != null) {
+		// phone.setId(model.getSelectedPhone().getId());
+		// } else
+		// model.setSelectedPhone(phone);
+		// }
 
 		try {
 			binder.writeBean(model.getSelectedPhone());
+
+			if (isNew)
+
+				model.getSelectedPhone().setId(0);
+
 			LocalDate now = LocalDate.now();
 			model.getSelectedPhone().setDateMaj(String.valueOf(now));
 
@@ -167,7 +172,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 			if (result != null) {
 				view.getBtnAjouterReparation().setEnabled(true);
 				view.getBtnDeletPhone().setEnabled(true);
-				new DetailsPhonePresenter(result);
+				// new DetailsPhonePresenter(result);
 			}
 
 		} catch (ValidationException e) {
@@ -180,11 +185,13 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 
 	@Override
 	public void onPhoneSelected() {
+
 		Phone phone = model.getSelectedPhone();
+		// binder.readBean(phone);
 		setPrixFields(phone);
 		if (phone.getDateMaj() == null)
 			view.getDateMajPhone().setValue(LocalDate.now());
-		// binder.readBean(phone);
+
 	}
 
 	private void setPrixFields(Phone phone) {
@@ -199,6 +206,9 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 			view.getTxtCoutRepPhone().setValue("0");
 		if (phone.getPrixAchat() == null) {
 			view.getTxtPrixAchatPhone().setValue("0");
+		}
+		if (phone.getPrixVente() == null) {
+			view.getTxtPrixVentePhone().setValue("0");
 		}
 
 		if (phone.getPrixVente() != null && phone.getPrixAchat() != null) {
@@ -259,7 +269,7 @@ public class DetailsPhonePresenter extends Observable implements DetPhoneModelLi
 		// cote téléphone
 		binder.forField(view.getComboCotePhone()).bind(Phone::getCotePhone, Phone::setCotePhone);
 
-		//etet batterie
+		// etet batterie
 		binder.forField(view.getTxtBatteriePhone()).bind(Phone::getEtatBatterie, Phone::setEtatBatterie);
 
 		// date d'achat
