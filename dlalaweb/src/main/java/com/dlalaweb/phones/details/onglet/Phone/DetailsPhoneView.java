@@ -93,7 +93,7 @@ public class DetailsPhoneView extends VerticalLayout {
 		this.comboCotePhone = new ComboBox<>("Côte téléphone");
 		this.dateAchatPhone = new DateField("Date d'achat");
 		this.dateVentePhone = new DateField("Date de vente");
-		this.dateMajPhone = new DateField("Date modificattion");
+		this.dateMajPhone = new DateField("Date modification");
 		hl3.addComponents(comboCotePhone, dateAchatPhone, dateVentePhone, dateMajPhone);
 		this.addComponent(hl3);
 
